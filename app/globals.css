@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0d14;
+  --bg-2: #111622;
+  --bg-3: #1a2030;
+  --panel: #141a28;
+  --line: #2a3448;
+  --fg: #e8ecf5;
+  --fg-dim: #8a94a8;
+  --fg-mute: #555d70;
+  --accent: #ff5b1f;
+  --accent-2: #6b5bff;
+  --health: #5fd693;
+  --mana: #5bb3ff;
+  --xp: #ffcc3b;
+  --danger: #e84a5f;
+
+  --f-px: var(--font-px), ui-monospace, monospace;
+  --f-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --f-mono: var(--font-mono), ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--f-sans);
+  overscroll-behavior: none;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(107,91,255,0.12), transparent 60%),
+    radial-gradient(ellipse at 80% 90%, rgba(255,91,31,0.10), transparent 55%),
+    var(--bg);
+  min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; background: transparent; border: none; color: inherit; }
+::selection { background: var(--accent); color: var(--bg); }
