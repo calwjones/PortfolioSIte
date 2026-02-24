@@ -41,3 +41,82 @@ body {
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; background: transparent; border: none; color: inherit; }
 ::selection { background: var(--accent); color: var(--bg); }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ========== HERO (shader CRT) ========== */
+.hero {
+  position: relative;
+  height: 620px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+.hero canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+.hero .content {
+  position: relative; z-index: 2;
+  height: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  pointer-events: none;
+}
+.hero .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.hero .top .brand {
+  font-family: var(--f-mono);
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.3em;
+  color: var(--fg);
+}
+.hero .top .brand .dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 999px;
+  background: var(--accent); box-shadow: 0 0 10px var(--accent);
+  margin-right: 10px; vertical-align: middle;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+.hero .top .sys {
+  font-family: var(--f-mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.3em; color: var(--fg-dim); text-align: right;
+  line-height: 1.8;
+}
+.hero .hero-mid { display: flex; flex-direction: column; gap: 16px; pointer-events: auto; }
+.hero h1.hero-title {
+  font-family: var(--f-px);
+  font-size: clamp(76px, 13vw, 180px);
+  font-weight: 400; line-height: 0.85; letter-spacing: 0.01em;
+  color: var(--fg);
+  text-shadow: 0 0 20px rgba(255,91,31,0.4), 0 0 60px rgba(255,91,31,0.2);
+}
+.hero h1.hero-title .u { color: var(--accent); animation: blink 1s steps(2) infinite; }
+.hero .sub {
+  font-family: var(--f-mono);
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.3em;
+  color: var(--fg-dim); max-width: 520px; line-height: 1.7;
+}
+.hero .bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  font-family: var(--f-mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.3em; color: var(--fg-mute);
+  gap: 12px;
+}
+.hero .bottom .hint { pointer-events: auto; }
+.hero .toggle {
+  pointer-events: auto;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--fg-dim);
+  padding: 8px 14px;
+  font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.hero .toggle:hover { border-color: var(--accent); color: var(--accent); }
+.hero .toggle.on { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 16px rgba(255,91,31,0.3) inset; }
+@media (max-width: 820px) {
+  .hero { height: 480px; }
+  .hero .content { padding: 32px 20px; }
+}
