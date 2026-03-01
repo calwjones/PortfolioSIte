@@ -3,7 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function Page() {
-  return <Hero />;
+  return (
+    <>
+      <Hero />
+      <Hud />
+      <div className="wrap">
+        <TitleBlock />
+        <CharacterCard />
+      </div>
+    </>
+  );
 }
 
 /* ---------- Hero (WebGL plasma + CRT) ---------- */
@@ -252,5 +261,183 @@ function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------- HUD ---------- */
+function Hud() {
+  const [clock, setClock] = useState("BRISTOL");
+  const [age] = useState(() => {
+    const now = new Date();
+    const bd = new Date(2004, 5, 21);
+    let a = now.getFullYear() - bd.getFullYear();
+    const m = now.getMonth() - bd.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < bd.getDate())) a--;
+    return a;
+  });
+
+  useEffect(() => {
+    const tick = () => {
+      const t = new Date();
+      const h = String(t.getHours()).padStart(2, "0");
+      const m = String(t.getMinutes()).padStart(2, "0");
+      setClock(`BRISTOL ${h}:${m}`);
+    };
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  return (
+    <div className="hud">
+      <div className="slot">
+        <span className="lbl">HP</span>
+        <span className="val" style={{ color: "var(--health)" }}>087/100</span>
+      </div>
+      <div className="slot">
+        <span className="lbl">MP</span>
+        <span className="val" style={{ color: "var(--mana)" }}>042/050</span>
+      </div>
+      <div className="slot">
+        <span className="lbl">LVL</span>
+        <span className="val">{String(age).padStart(2, "0")}</span>
+      </div>
+      <div className="slot">
+        <span className="lbl">XP</span>
+        <span className="val" style={{ color: "var(--xp)" }}>14,820</span>
+      </div>
+      <div className="spacer" />
+      <div className="slot">
+        <span className="save-dot" />
+        <span className="lbl">Auto-saving</span>
+      </div>
+      <div className="slot">
+        <span className="lbl">Zone</span>
+        <span className="val">{clock}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Title ---------- */
+function TitleBlock() {
+  const [minutes, setMinutes] = useState(12);
+
+  useEffect(() => {
+    const id = window.setInterval(() => setMinutes((m) => m + 1), 60_000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const mm = String(minutes).padStart(2, "0");
+
+  return (
+    <div className="title-block">
+      <div>
+        <div className="kicker">Save slot 01 · Resumed</div>
+        <h1>
+          CALLUM JONES<span className="blink">_</span>
+        </h1>
+      </div>
+      <div className="meta">
+        <div className="row">
+          <span className="lbl">Playtime </span>
+          <span className="val">0046h {mm}m</span>
+        </div>
+        <div className="row">
+          <span className="lbl">Saves </span>
+          <span className="val">04 runs · 12 drafts</span>
+        </div>
+        <div className="row">
+          <span className="lbl">Last save </span>
+          <span className="val">just now</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Character card ---------- */
+function CharacterCard() {
+  const [age] = useState(() => {
+    const now = new Date();
+    const bd = new Date(2004, 5, 21);
+    let a = now.getFullYear() - bd.getFullYear();
+    const m = now.getMonth() - bd.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < bd.getDate())) a--;
+    return a;
+  });
+  return (
+    <article className="character">
+      <div className="char-avatar">
+        <div>
+          <div className="frame">
+            <span className="corner">LV {age}</span>
+            <span className="glyph">C</span>
+          </div>
+          <div className="handle">
+            callum<span className="at">.jones</span>
+          </div>
+          <div className="class">Final-year CS · UWE Bristol</div>
+        </div>
+      </div>
+      <div className="char-stats">
+        <p className="quote">
+          Final-year CS student at <em>UWE Bristol</em>. Modules finish May 2026,
+          graduating July — open to CS graduate roles across the UK, remote or on-site.
+        </p>
+        <div className="stat-grid">
+          <StatBar label="FRONTEND" v={0.88} value={88} />
+          <StatBar label="BACKEND" v={0.85} value={85} cls="mana" />
+          <StatBar label="TOOLING" v={0.76} value={76} cls="focus" />
+          <StatBar label="GRAPHICS" v={0.72} value={72} cls="xp" />
+          <StatBar label="SYSTEMS" v={0.65} value={65} />
+          <StatBar label="DATABASES" v={0.62} value={62} cls="mana" />
+        </div>
+        <div className="char-loadout">
+          <span className="chip eq">TypeScript</span>
+          <span className="chip eq">React</span>
+          <span className="chip eq">Next.js</span>
+          <span className="chip eq">Node.js</span>
+          <span className="chip eq">C++</span>
+          <span className="chip">Python</span>
+          <span className="chip">JavaScript</span>
+          <span className="chip">Express</span>
+          <span className="chip">Socket.IO</span>
+          <span className="chip">Prisma</span>
+          <span className="chip">PostgreSQL</span>
+          <span className="chip">SQLite</span>
+          <span className="chip">Docker</span>
+          <span className="chip">CMake</span>
+          <span className="chip">HTML Canvas</span>
+          <span className="chip">Git</span>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function StatBar({
+  label,
+  v,
+  value,
+  cls,
+  color,
+}: {
+  label: string;
+  v: number;
+  value: number;
+  cls?: "focus" | "mana" | "xp";
+  color?: string;
+}) {
+  const style: React.CSSProperties = { ["--v" as string]: v };
+  if (color) style.background = color;
+  return (
+    <div className="stat">
+      <span className="label">{label}</span>
+      <span className="bar">
+        <span className={`fill${cls ? " " + cls : ""}`} style={style} />
+      </span>
+      <span className="val">{value}</span>
+    </div>
   );
 }
