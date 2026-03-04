@@ -2,6 +2,120 @@
 
 import { useEffect, useRef, useState } from "react";
 
+type Run = {
+  dataGlow: string;
+  medal: string;
+  medalClass?: "silver" | "bronze" | "progress";
+  rankLabel: string;
+  meta: string;
+  name: string;
+  tag: string;
+  desc: string;
+  diffClass: "diff-easy" | "diff-medium" | "diff-hard";
+  diffStars: string;
+  hours: string;
+  stat3Label: string;
+  stat3Value: string;
+  achievements: { label: string; locked?: boolean }[];
+  primary: { label: string; href?: string };
+  source: { label: string; href?: string };
+};
+
+const RUNS: Run[] = [
+  {
+    dataGlow: "rgba(255,91,31,0.18)",
+    medal: "S",
+    rankLabel: "RANK S · LIVE",
+    meta: "2026 · TS · NEXT.JS · POSTGRES · DOCKER",
+    name: "Matchsticked",
+    tag: "MAIN QUEST · DEPLOYED",
+    desc: "Group movie-picking app. Real-time swipe-to-match sessions over Socket.IO, solo roulette, discover mode. Next.js client + Express/Prisma/Postgres server, Dockerised, deployed at matchsticked.com.",
+    diffClass: "diff-hard",
+    diffStars: "★★★★☆",
+    hours: "180+",
+    stat3Label: "STACK",
+    stat3Value: "FULL",
+    achievements: [
+      { label: "Realtime" },
+      { label: "Prisma Tamer" },
+      { label: "Dockerised" },
+      { label: "Actually Used" },
+      { label: "100 users", locked: true },
+    ],
+    primary: { label: "▶ VIEW LIVE", href: "https://matchsticked.com" },
+    source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/MoviePicker" },
+  },
+  {
+    dataGlow: "rgba(255,204,59,0.18)",
+    medal: "S",
+    rankLabel: "RANK S · FINAL YEAR",
+    meta: "2026 · C++ · CMAKE",
+    name: "GameEngine",
+    tag: "DISSERTATION PROJECT · FROM SCRATCH",
+    desc: "Final-year university project — and the subject of my dissertation. A game engine written in C++ from scratch; my deepest dive into systems code yet. Taught me where abstractions leak and where they hold.",
+    diffClass: "diff-hard",
+    diffStars: "★★★★★",
+    hours: "200+",
+    stat3Label: "LOC",
+    stat3Value: "~10k",
+    achievements: [
+      { label: "Systems Code" },
+      { label: "CMake Wrangler" },
+      { label: "Memory Safe-ish" },
+      { label: "Debug Wizard" },
+      { label: "Ship with docs", locked: true },
+    ],
+    primary: { label: "▶ VIEW LOG", href: "https://github.com/calwjones/GameEngine" },
+    source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/GameEngine" },
+  },
+  {
+    dataGlow: "rgba(107,91,255,0.2)",
+    medal: "A",
+    rankLabel: "RANK A · SHIPPED",
+    meta: "2026 · VANILLA JS · EXPRESS · SQLITE",
+    name: "Sand Tetris",
+    tag: "PLAYABLE · ARCADE",
+    desc: "Tetris with classic and sand-physics modes. 16 vanilla-JS modules, Uint8Array grain grid, 8-connected flood-fill clears, Express/SQLite leaderboard.",
+    diffClass: "diff-medium",
+    diffStars: "★★★☆☆",
+    hours: "40+",
+    stat3Label: "GRAINS/F",
+    stat3Value: "~3.2k",
+    achievements: [
+      { label: "Sand Physics" },
+      { label: "Flood Fill" },
+      { label: "Trig LUT" },
+      { label: "Leaderboard" },
+      { label: "Mobile", locked: true },
+    ],
+    primary: { label: "▶ SOURCE", href: "https://github.com/calwjones/Tetris" },
+    source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/Tetris" },
+  },
+  {
+    dataGlow: "rgba(95,214,147,0.18)",
+    medal: "C",
+    medalClass: "bronze",
+    rankLabel: "RANK C · SHIPPED",
+    meta: "2026 · PYTHON · TKINTER",
+    name: "Calculator",
+    tag: "SIDE QUEST · DESKTOP APP",
+    desc: "Desktop calculator with simple and scientific modes, keyboard control, history. Shunting-yard + RPN under the hood — no unsafe evaluation. Most-used app I've shipped.",
+    diffClass: "diff-easy",
+    diffStars: "★★☆☆☆",
+    hours: "10",
+    stat3Label: "MODES",
+    stat3Value: "02",
+    achievements: [
+      { label: "First GUI" },
+      { label: "RPN" },
+      { label: "Actually Useful" },
+      { label: "Unit tests", locked: true },
+    ],
+    primary: { label: "▶ VIEW LOG", href: "https://github.com/calwjones/Calculator" },
+    source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/Calculator" },
+  },
+];
+
 export default function Page() {
   return (
     <>
@@ -10,6 +124,8 @@ export default function Page() {
       <div className="wrap">
         <TitleBlock />
         <CharacterCard />
+        <SectionHead title="COMPLETED RUNS" right={`0${RUNS.length} / 0${RUNS.length} · Hover for glow`} />
+        <Runs />
       </div>
     </>
   );
@@ -439,5 +555,113 @@ function StatBar({
       </span>
       <span className="val">{value}</span>
     </div>
+  );
+}
+
+/* ---------- Section head ---------- */
+function SectionHead({ title, right }: { title: string; right: string }) {
+  return (
+    <div className="section-head">
+      <h2>
+        <span className="bracket">[</span> {title} <span className="bracket">]</span>
+      </h2>
+      <div className="right">{right}</div>
+    </div>
+  );
+}
+
+/* ---------- Runs ---------- */
+function Runs() {
+  return (
+    <div className="runs">
+      {RUNS.map((r) => (
+        <RunCard key={r.name} r={r} />
+      ))}
+    </div>
+  );
+}
+
+function RunCard({ r }: { r: Run }) {
+  const ref = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.setProperty("--glow", r.dataGlow);
+    const onMove = (e: PointerEvent) => {
+      const rect = el.getBoundingClientRect();
+      el.style.setProperty("--mx", `${((e.clientX - rect.left) / rect.width) * 100}%`);
+      el.style.setProperty("--my", `${((e.clientY - rect.top) / rect.height) * 100}%`);
+    };
+    el.addEventListener("pointermove", onMove);
+    return () => el.removeEventListener("pointermove", onMove);
+  }, [r.dataGlow]);
+
+  return (
+    <article ref={ref} className="run" data-glow={r.dataGlow}>
+      <div className="top">
+        <span className="rank">
+          <span className={`medal${r.medalClass ? " " + r.medalClass : ""}`}>{r.medal}</span>
+          {r.rankLabel}
+        </span>
+        <span>{r.meta}</span>
+      </div>
+      <div className="name">
+        <h3>{r.name}</h3>
+        <span className="tag">{r.tag}</span>
+      </div>
+      <p className="desc">{r.desc}</p>
+      <div className="stats">
+        <span className={`s ${r.diffClass}`}>
+          DIFFICULTY<span className="v">{r.diffStars}</span>
+        </span>
+        <span className="s">
+          HOURS<span className="v accent">{r.hours}</span>
+        </span>
+        <span className="s">
+          {r.stat3Label}<span className="v">{r.stat3Value}</span>
+        </span>
+      </div>
+      <div className="achievements">
+        {r.achievements.map((a, i) => (
+          <span key={i} className={`ach${a.locked ? " locked" : ""}`}>{a.label}</span>
+        ))}
+      </div>
+      <div className="actions">
+        <LinkButton href={r.primary.href} primary>{r.primary.label}</LinkButton>
+        <LinkButton href={r.source.href}>{r.source.label}</LinkButton>
+      </div>
+    </article>
+  );
+}
+
+function LinkButton({
+  href,
+  children,
+  primary,
+}: {
+  href?: string;
+  children: React.ReactNode;
+  primary?: boolean;
+}) {
+  const cls = `btn${primary ? " primary" : ""}`;
+  const stop = (e: React.MouseEvent) => e.stopPropagation();
+  if (href) {
+    return (
+      <a
+        className={cls}
+        href={href}
+        target={href.startsWith("http") ? "_blank" : undefined}
+        rel={href.startsWith("http") ? "noreferrer" : undefined}
+        onClick={stop}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <button className={cls} onClick={stop}>
+      {children}
+    </button>
   );
 }
