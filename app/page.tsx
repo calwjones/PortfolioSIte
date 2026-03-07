@@ -2,6 +2,41 @@
 
 import { useEffect, useRef, useState } from "react";
 
+type InvItem = {
+  g: string;
+  name: string;
+  rare?: "legend" | "rare";
+  empty?: boolean;
+  q?: string;
+};
+
+const INVENTORY: InvItem[] = [
+  { g: "Ts", name: "TypeScript", rare: "legend" },
+  { g: "C++", name: "C++", rare: "legend" },
+  { g: "Py", name: "Python", rare: "rare" },
+  { g: "Js", name: "JavaScript", rare: "rare" },
+  { g: "R", name: "React", rare: "rare" },
+  { g: "Nx", name: "Next.js", rare: "rare" },
+  { g: "No", name: "Node.js" },
+  { g: "Io", name: "Socket.IO" },
+  { g: "Pr", name: "Prisma" },
+  { g: "Pg", name: "PostgreSQL" },
+  { g: "Tw", name: "Tailwind" },
+  { g: "Cm", name: "CMake" },
+  { g: "Dk", name: "Docker" },
+  { g: "Ex", name: "Express" },
+  { g: "Tk", name: "Tkinter" },
+  { g: "Cv", name: "HTML Canvas" },
+  { g: "Sq", name: "SQLite" },
+  { g: "Git", name: "Git" },
+  { g: "?", name: "Rust (locked)", empty: true, q: "Soon" },
+  { g: "?", name: "Go (locked)", empty: true, q: "Soon" },
+  { g: "?", name: "GLSL (locked)", empty: true, q: "Soon" },
+  { g: "?", name: "Vulkan (locked)", empty: true, q: "Soon" },
+  { g: "?", name: "Empty slot", empty: true },
+  { g: "?", name: "Empty slot", empty: true },
+];
+
 type Run = {
   dataGlow: string;
   medal: string;
@@ -126,6 +161,8 @@ export default function Page() {
         <CharacterCard />
         <SectionHead title="COMPLETED RUNS" right={`0${RUNS.length} / 0${RUNS.length} · Hover for glow`} />
         <Runs />
+        <SectionHead title="INVENTORY · TECH" right="Hover for name · 18 equipped · 06 locked" />
+        <Inventory />
       </div>
     </>
   );
@@ -663,5 +700,25 @@ function LinkButton({
     <button className={cls} onClick={stop}>
       {children}
     </button>
+  );
+}
+
+/* ---------- Inventory ---------- */
+function Inventory() {
+  return (
+    <div className="inventory">
+      <div className="inv-grid">
+        {INVENTORY.map((i, idx) => (
+          <div
+            key={idx}
+            className={`slot-box${i.empty ? " empty" : ""}${i.rare ? " " + i.rare : ""}`}
+          >
+            {i.g}
+            <span className="qty">{i.q || (i.empty ? "—" : "×1")}</span>
+            <span className="tip">{i.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
