@@ -765,11 +765,11 @@ function SandTetris() {
     canvas.height = H;
     ctx.imageSmoothingEnabled = false;
 
-    const MOMENTUM_FRAMES = 8;
+    const MOMENTUM_FRAMES = 10;
     const sandGrid: Uint8Array[] = Array.from({ length: SAND_ROWS }, () =>
       new Uint8Array(SAND_COLS)
     );
-    const momentumGrid: Uint8Array[] = Array.from({ length: SAND_ROWS }, () =>
+    let momentumGrid: Uint8Array[] = Array.from({ length: SAND_ROWS }, () =>
       new Uint8Array(SAND_COLS)
     );
 
@@ -806,7 +806,7 @@ function SandTetris() {
     };
 
     // collision: allow a small overlap so piece can sink into the pile
-    const collidesSand = (matrix: number[][], px: number, py: number, tol = 3) => {
+    const collidesSand = (matrix: number[][], px: number, py: number, tol = 2) => {
       for (let y = 0; y < matrix.length; y++) {
         for (let x = 0; x < matrix[y].length; x++) {
           if (!matrix[y][x]) continue;
@@ -944,8 +944,9 @@ function SandTetris() {
         }
       }
       if (clearedCount) {
-        scoreRef.current += Math.max(3, Math.floor(clearedCount / 8));
+        scoreRef.current += Math.max(5, Math.floor(clearedCount / 5));
         setScore(scoreRef.current);
+        // settle after clearing
         for (let i = 0; i < 10; i++) updateSand();
       }
     };
