@@ -37,6 +37,16 @@ const INVENTORY: InvItem[] = [
   { g: "?", name: "Empty slot", empty: true },
 ];
 
+type Quest = { label: string; reward: string; done?: boolean };
+const QUESTS: Quest[] = [
+  { label: "Finish final-year modules", reward: "MAY 2026" },
+  { label: "Graduate — BSc Computer Science, UWE Bristol", reward: "JUL 2026" },
+  { label: "Land first CS graduate role", reward: "OPEN TO OFFERS" },
+  { label: "Matchsticked — post-launch iteration", reward: "LIVE · ONGOING" },
+  { label: "Ship the next side project", reward: "ONGOING" },
+  { label: "Final-year project + dissertation shipped — GameEngine", reward: "DONE · 2026", done: true },
+];
+
 type Run = {
   dataGlow: string;
   medal: string;
@@ -165,6 +175,14 @@ export default function Page() {
         <Arcade />
         <SectionHead title="INVENTORY · TECH" right="Hover for name · 18 equipped · 06 locked" />
         <Inventory />
+        <SectionHead title="QUEST LOG · NOW" right="03 active · 03 completed this week" />
+        <QuestLog />
+        <SectionHead title="WORLD MAP · CONTACT" right="Teleport → message" />
+        <WorldMap />
+        <footer className="savefooter">
+          <span>© 2026 Callum Jones · SAVE FILE 001</span>
+          <span>Built with Next.js · shaders in WebGL · sand physics from my Tetris repo</span>
+        </footer>
       </div>
     </>
   );
@@ -1375,6 +1393,104 @@ function Inventory() {
             <span className="tip">{i.name}</span>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Quest log ---------- */
+function QuestLog() {
+  return (
+    <div className="questlog">
+      {QUESTS.map((q, i) => (
+        <div key={i} className={`quest ${q.done ? "done" : "active"}`}>
+          <span className="box" />
+          <span className="label">{q.label}</span>
+          <span className="reward">{q.reward}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- World map ---------- */
+function WorldMap() {
+  return (
+    <div className="worldmap">
+      <div>
+        <div className="callout">
+          Respawn<br />
+          in your <em>inbox</em>.
+        </div>
+        <p className="sub">
+          Open to CS graduate roles across the UK — remote or on-site. Based in Bristol;
+          happy to relocate for the right role.
+        </p>
+        <div className="buttons">
+          <a className="big-btn primary" href="mailto:calwjones12@gmail.com">
+            calwjones12@gmail.com <span className="arr">→</span>
+          </a>
+          <a
+            className="big-btn"
+            href="https://www.linkedin.com/in/callum-jones-a252b3389/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            LinkedIn <span className="arr">↗</span>
+          </a>
+          <a
+            className="big-btn"
+            href="https://github.com/calwjones"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub <span className="arr">↗</span>
+          </a>
+          <a
+            className="big-btn"
+            href="https://matchsticked.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Matchsticked <span className="arr">↗</span>
+          </a>
+        </div>
+      </div>
+      <div className="map-frame">
+        <svg viewBox="0 0 400 300" fill="none" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" stroke="#1a2030" strokeWidth="0.5" fill="none" />
+            </pattern>
+          </defs>
+          <rect width="400" height="300" fill="url(#g)" />
+          <path
+            d="M 140 60 Q 170 55, 180 70 Q 195 80, 190 110 Q 205 120, 200 140 Q 215 160, 200 190 Q 195 220, 160 230 Q 140 235, 130 215 Q 115 200, 125 175 Q 110 160, 120 140 Q 105 120, 120 100 Q 125 80, 140 60 Z"
+            fill="#141a28"
+            stroke="#2a3448"
+            strokeWidth="1"
+          />
+          <path
+            d="M 60 140 Q 75 130, 90 150 Q 95 170, 80 180 Q 65 175, 60 160 Z"
+            fill="#141a28"
+            stroke="#2a3448"
+            strokeWidth="1"
+          />
+          <circle cx="150" cy="170" r="3" fill="#ff5b1f" />
+          <circle cx="150" cy="170" r="8" fill="none" stroke="#ff5b1f" strokeWidth="1" opacity="0.6">
+            <animate attributeName="r" from="8" to="20" dur="2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite" />
+          </circle>
+          <text x="158" y="165" fill="#ff5b1f" fontFamily="JetBrains Mono, monospace" fontSize="9" letterSpacing="2">
+            BRISTOL
+          </text>
+          <text x="20" y="290" fill="#4a4a48" fontFamily="JetBrains Mono, monospace" fontSize="8" letterSpacing="2">
+            UWE BRISTOL · GRAD JUL 2026
+          </text>
+          <text x="240" y="290" fill="#4a4a48" fontFamily="JetBrains Mono, monospace" fontSize="8" letterSpacing="2">
+            ZONE: UK · OPEN TO ROLES
+          </text>
+        </svg>
       </div>
     </div>
   );
