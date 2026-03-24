@@ -49,6 +49,7 @@ const QUESTS: Quest[] = [
 
 type Run = {
   dataGlow: string;
+  achievement: string;
   medal: string;
   medalClass?: "silver" | "bronze" | "progress";
   rankLabel: string;
@@ -69,6 +70,7 @@ type Run = {
 const RUNS: Run[] = [
   {
     dataGlow: "rgba(255,91,31,0.18)",
+    achievement: "First Ship",
     medal: "S",
     rankLabel: "RANK S · LIVE",
     meta: "2026 · TS · NEXT.JS · POSTGRES · DOCKER",
@@ -92,6 +94,7 @@ const RUNS: Run[] = [
   },
   {
     dataGlow: "rgba(255,204,59,0.18)",
+    achievement: "Built From Scratch",
     medal: "S",
     rankLabel: "RANK S · FINAL YEAR",
     meta: "2026 · C++ · CMAKE",
@@ -115,6 +118,7 @@ const RUNS: Run[] = [
   },
   {
     dataGlow: "rgba(107,91,255,0.2)",
+    achievement: "Canvas Wrangler",
     medal: "A",
     rankLabel: "RANK A · SHIPPED",
     meta: "2026 · VANILLA JS · EXPRESS · SQLITE",
@@ -138,6 +142,7 @@ const RUNS: Run[] = [
   },
   {
     dataGlow: "rgba(95,214,147,0.18)",
+    achievement: "Shipped & Forgot",
     medal: "C",
     medalClass: "bronze",
     rankLabel: "RANK C · SHIPPED",
@@ -164,6 +169,7 @@ const RUNS: Run[] = [
 export default function Page() {
   return (
     <>
+      <BootScreen />
       <Hero />
       <Hud />
       <div className="wrap">
@@ -184,7 +190,91 @@ export default function Page() {
           <span>Built with Next.js · shaders in WebGL · sand physics from my Tetris repo</span>
         </footer>
       </div>
+      <Toast />
     </>
+  );
+}
+
+/* ---------- Toast ---------- */
+function Toast() {
+  const [name, setName] = useState("First Visit");
+  const [show, setShow] = useState(false);
+  const timer = useRef<number | null>(null);
+
+  useEffect(() => {
+    const onToast = (e: Event) => {
+      const detail = (e as CustomEvent<string>).detail;
+      setName(detail);
+      setShow(true);
+      if (timer.current) window.clearTimeout(timer.current);
+      timer.current = window.setTimeout(() => setShow(false), 2800);
+    };
+    window.addEventListener("sav:toast", onToast as EventListener);
+    return () => window.removeEventListener("sav:toast", onToast as EventListener);
+  }, []);
+
+  return (
+    <div className={`toast${show ? " show" : ""}`} role="status" aria-live="polite">
+      <div className="t-label">Achievement Unlocked</div>
+      <div className="t-name">{name}</div>
+    </div>
+  );
+}
+
+function fireToast(name: string) {
+  window.dispatchEvent(new CustomEvent("sav:toast", { detail: name }));
+}
+
+/* ---------- Boot screen ---------- */
+function BootScreen() {
+  const [mounted, setMounted] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [removed, setRemoved] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("sav:booted")) {
+      setRemoved(true);
+      return;
+    }
+    setMounted(true);
+    sessionStorage.setItem("sav:booted", "1");
+    const t1 = window.setTimeout(() => setHidden(true), 1400);
+    const t2 = window.setTimeout(() => {
+      setRemoved(true);
+      fireToast("First Visit");
+    }, 2000);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, []);
+
+  if (removed || !mounted) return null;
+
+  const lines = [
+    "Loading save slot 01...",
+    "Loading profile...",
+    "Mounting projects (04 runs)...",
+    "Loading inventory (18 items)...",
+    "Connecting — Bristol, UK...",
+    "Ready.",
+  ];
+
+  return (
+    <div className={`boot${hidden ? " hidden" : ""}`}>
+      <h2>CALLUM.SAV</h2>
+      <div className="bar">
+        <div className="bar-fill" />
+      </div>
+      <div className="lines">
+        {lines.map((l, i) => (
+          <div key={i} className="l" style={{ animationDelay: `${i * 0.15}s` }}>
+            » {l}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -654,8 +744,10 @@ function RunCard({ r }: { r: Run }) {
     return () => el.removeEventListener("pointermove", onMove);
   }, [r.dataGlow]);
 
+  const onClick = () => fireToast(r.achievement);
+
   return (
-    <article ref={ref} className="run" data-glow={r.dataGlow}>
+    <article ref={ref} className="run" onClick={onClick} data-glow={r.dataGlow}>
       <div className="top">
         <span className="rank">
           <span className={`medal${r.medalClass ? " " + r.medalClass : ""}`}>{r.medal}</span>
