@@ -191,6 +191,7 @@ export default function Page() {
         </footer>
       </div>
       <Toast />
+      <EasterEggs />
     </>
   );
 }
@@ -276,6 +277,59 @@ function BootScreen() {
       </div>
     </div>
   );
+}
+
+/* ---------- Easter eggs ---------- */
+function EasterEggs() {
+  useEffect(() => {
+    const konami = [
+      "ArrowUp",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowLeft",
+      "ArrowRight",
+      "b",
+      "a",
+    ];
+    let kIdx = 0;
+    let typeBuf = "";
+    const target = "callum";
+
+    const onKey = (e: KeyboardEvent) => {
+      const expected = konami[kIdx];
+      if (e.key.toLowerCase() === expected.toLowerCase() || e.key === expected) {
+        kIdx++;
+        if (kIdx === konami.length) {
+          kIdx = 0;
+          fireToast("God Mode Enabled");
+          document.documentElement.style.setProperty("--accent", "#5fd693");
+          document.documentElement.style.setProperty("--accent-2", "#ffcc3b");
+        }
+      } else {
+        kIdx = 0;
+      }
+
+      if (e.key.length === 1) {
+        typeBuf = (typeBuf + e.key.toLowerCase()).slice(-target.length);
+        if (typeBuf === target) {
+          fireToast("Contact Unlocked");
+          document.body.style.transition = "filter 1s";
+          document.body.style.filter = "hue-rotate(180deg)";
+          window.setTimeout(() => {
+            document.body.style.filter = "";
+          }, 2500);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  return null;
 }
 
 /* ---------- Hero (WebGL plasma + CRT) ---------- */
