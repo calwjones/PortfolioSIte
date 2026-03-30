@@ -124,7 +124,7 @@ const RUNS: Run[] = [
     meta: "2026 · VANILLA JS · EXPRESS · SQLITE",
     name: "Sand Tetris",
     tag: "PLAYABLE · ARCADE",
-    desc: "Tetris with classic and sand-physics modes. 16 vanilla-JS modules, Uint8Array grain grid, 8-connected flood-fill clears, Express/SQLite leaderboard.",
+    desc: "Tetris with classic and sand-physics modes. 16 vanilla-JS modules, Uint8Array grain grid, 8-connected flood-fill clears, Express/SQLite leaderboard. Demo playing below — built from my repo.",
     diffClass: "diff-medium",
     diffStars: "★★★☆☆",
     hours: "40+",
@@ -137,7 +137,7 @@ const RUNS: Run[] = [
       { label: "Leaderboard" },
       { label: "Mobile", locked: true },
     ],
-    primary: { label: "▶ SOURCE", href: "https://github.com/calwjones/Tetris" },
+    primary: { label: "▶ PLAY DEMO ↓" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/Tetris" },
   },
   {
@@ -175,7 +175,7 @@ export default function Page() {
       <div className="wrap">
         <TitleBlock />
         <CharacterCard />
-        <SectionHead title="COMPLETED RUNS" right={`0${RUNS.length} / 0${RUNS.length} · Hover for glow`} />
+        <SectionHead title="COMPLETED RUNS" right={`0${RUNS.length} / 0${RUNS.length} · Hover for glow · Click to inspect`} />
         <Runs />
         <SectionHead title="ARCADE · PLAYABLE" right="Click screen to start · Arrow keys" />
         <Arcade />
@@ -699,8 +699,9 @@ function CharacterCard() {
       </div>
       <div className="char-stats">
         <p className="quote">
-          Final-year CS student at <em>UWE Bristol</em>. Modules finish May 2026,
-          graduating July — open to CS graduate roles across the UK, remote or on-site.
+          Final-year CS student at <em>UWE Bristol</em>. Just shipped <em>GameEngine</em> —
+          my final-year project and dissertation. Modules finish May 2026, graduating July
+          — open to CS graduate roles across the UK, remote or on-site.
         </p>
         <div className="stat-grid">
           <StatBar label="FRONTEND" v={0.88} value={88} />
@@ -1599,6 +1600,13 @@ function WorldMap() {
             rel="noreferrer"
           >
             Matchsticked <span className="arr">↗</span>
+          </a>
+          <a
+            className="big-btn"
+            href="/Callum_Jones_CV.docx"
+            download
+          >
+            Download CV <span className="arr">⤓</span>
           </a>
         </div>
       </div>
