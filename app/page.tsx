@@ -2,6 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return reduced;
+}
+
 type InvItem = {
   g: string;
   name: string;
@@ -316,11 +328,14 @@ function EasterEggs() {
         typeBuf = (typeBuf + e.key.toLowerCase()).slice(-target.length);
         if (typeBuf === target) {
           fireToast("Contact Unlocked");
-          document.body.style.transition = "filter 1s";
-          document.body.style.filter = "hue-rotate(180deg)";
-          window.setTimeout(() => {
-            document.body.style.filter = "";
-          }, 2500);
+          const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (!reduced) {
+            document.body.style.transition = "filter 1s";
+            document.body.style.filter = "hue-rotate(180deg)";
+            window.setTimeout(() => {
+              document.body.style.filter = "";
+            }, 2500);
+          }
         }
       }
     };
@@ -339,6 +354,7 @@ function Hero() {
   const [sysTime, setSysTime] = useState("—:—:—");
   const [crtOn, setCrtOn] = useState(true);
   const crtRef = useRef(1);
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     crtRef.current = crtOn ? 1 : 0;
@@ -355,6 +371,7 @@ function Hero() {
   }, []);
 
   useEffect(() => {
+    if (reduced) return;
     const canvas = canvasRef.current;
     const section = sectionRef.current;
     if (!canvas || !section) return;
@@ -533,18 +550,31 @@ function Hero() {
     };
     frame();
 
+    // pause shader when tab is hidden — saves battery + GPU
+    const onVis = () => {
+      if (document.hidden) {
+        running = false;
+        cancelAnimationFrame(rafId);
+      } else if (!running) {
+        running = true;
+        rafId = requestAnimationFrame(frame);
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+
     return () => {
       running = false;
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
       section.removeEventListener("pointermove", onMove);
       section.removeEventListener("pointerleave", onLeave);
+      document.removeEventListener("visibilitychange", onVis);
     };
-  }, []);
+  }, [reduced]);
 
   return (
     <section className="hero" ref={sectionRef}>
-      <canvas ref={canvasRef} />
+      {reduced ? <div className="hero-static-bg" /> : <canvas ref={canvasRef} />}
       <div className="content">
         <div className="top">
           <div className="brand">
@@ -568,13 +598,17 @@ function Hero() {
           </p>
         </div>
         <div className="bottom">
-          <span className="hint">move cursor to warp the signal</span>
-          <button
-            className={`toggle${crtOn ? " on" : ""}`}
-            onClick={() => setCrtOn((v) => !v)}
-          >
-            CRT: {crtOn ? "ON" : "OFF"}
-          </button>
+          <span className="hint">
+            {reduced ? "motion reduced · static signal" : "move cursor to warp the signal"}
+          </span>
+          {!reduced && (
+            <button
+              className={`toggle${crtOn ? " on" : ""}`}
+              onClick={() => setCrtOn((v) => !v)}
+            >
+              CRT: {crtOn ? "ON" : "OFF"}
+            </button>
+          )}
         </div>
       </div>
     </section>
@@ -1562,6 +1596,7 @@ function QuestLog() {
 
 /* ---------- World map ---------- */
 function WorldMap() {
+  const reduced = usePrefersReducedMotion();
   return (
     <div className="worldmap">
       <div>
@@ -1632,8 +1667,12 @@ function WorldMap() {
           />
           <circle cx="150" cy="170" r="3" fill="#ff5b1f" />
           <circle cx="150" cy="170" r="8" fill="none" stroke="#ff5b1f" strokeWidth="1" opacity="0.6">
-            <animate attributeName="r" from="8" to="20" dur="2s" repeatCount="indefinite" />
-            <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite" />
+            {!reduced && (
+              <>
+                <animate attributeName="r" from="8" to="20" dur="2s" repeatCount="indefinite" />
+                <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite" />
+              </>
+            )}
           </circle>
           <text x="158" y="165" fill="#ff5b1f" fontFamily="JetBrains Mono, monospace" fontSize="9" letterSpacing="2">
             BRISTOL

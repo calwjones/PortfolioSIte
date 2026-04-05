@@ -622,10 +622,21 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
 }
 .toast .t-name { font-family: var(--f-px); font-size: 20px; color: var(--fg); }
 
+.hero-static-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 30%, rgba(107,91,255,0.35), transparent 60%),
+    radial-gradient(ellipse at 75% 75%, rgba(255,91,31,0.45), transparent 55%),
+    #0a0d14;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .boot { display: none; }
   .stat .bar .fill { animation: none; transform: scaleX(var(--v, 1)); }
-  .save-dot, .quest.active .box::before { animation: none; }
+  .save-dot,
+  .quest.active .box::before,
+  .hero .top .brand .dot,
+  .hero h1.hero-title .u,
   .title-block h1 .blink { animation: none; }
 }
 
