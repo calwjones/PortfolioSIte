@@ -943,6 +943,7 @@ function SandTetris() {
   const frameRef = useRef<HTMLDivElement | null>(null);
   const [score, setScore] = useState(0);
   const [overlayHidden, setOverlayHidden] = useState(false);
+  const [gameOverFlag, setGameOverFlag] = useState(false);
   const scoreRef = useRef(0);
 
   useEffect(() => {
@@ -1160,6 +1161,13 @@ function SandTetris() {
     let lastSand = 0;
     let lastClearCheck = 0;
 
+    const endGame = () => {
+      gameOver = true;
+      running = false;
+      setGameOverFlag(true);
+      setOverlayHidden(false);
+    };
+
     const spawn = () => {
       const matrix = nextFromBag();
       piece = {
@@ -1168,8 +1176,7 @@ function SandTetris() {
         y: -matrix.length,
       };
       if (collidesSand(piece.matrix, piece.x, Math.max(0, piece.y))) {
-        gameOver = true;
-        running = false;
+        endGame();
       }
     };
 
@@ -1232,8 +1239,7 @@ function SandTetris() {
           piece.y += 1;
         } else {
           if (piece.y < 0) {
-            gameOver = true;
-            running = false;
+            endGame();
           } else {
             bulkMergeSand(piece.matrix, piece.x, piece.y);
             piece = null;
@@ -1262,38 +1268,50 @@ function SandTetris() {
         setScore(0);
         piece = null;
         gameOver = false;
+        setGameOverFlag(false);
       }
       if (!running) {
         running = true;
         setOverlayHidden(true);
+        frameEl.focus();
         rafId = requestAnimationFrame(step);
       }
     };
 
     const onClick = () => start();
+    // scoped to frame so arrow keys don't leak into the snake minigame
     const onKey = (e: KeyboardEvent) => {
+      if (!running && (e.key === "Enter" || e.key === " ")) {
+        e.preventDefault();
+        start();
+        return;
+      }
       if (!running || !piece) return;
       if (e.key === "ArrowLeft") {
+        e.preventDefault();
         if (!collidesSand(piece.matrix, piece.x - 1, piece.y)) piece.x -= 1;
       } else if (e.key === "ArrowRight") {
+        e.preventDefault();
         if (!collidesSand(piece.matrix, piece.x + 1, piece.y)) piece.x += 1;
       } else if (e.key === "ArrowDown") {
+        e.preventDefault();
         if (!collidesSand(piece.matrix, piece.x, piece.y + 1)) piece.y += 1;
       } else if (e.key.toLowerCase() === "z" || e.key === "ArrowUp") {
+        e.preventDefault();
         const rotated = rotate(piece.matrix);
         if (!collidesSand(rotated, piece.x, piece.y)) piece.matrix = rotated;
       }
     };
 
     frameEl.addEventListener("click", onClick);
-    window.addEventListener("keydown", onKey);
+    frameEl.addEventListener("keydown", onKey);
     render();
 
     return () => {
       running = false;
       cancelAnimationFrame(rafId);
       frameEl.removeEventListener("click", onClick);
-      window.removeEventListener("keydown", onKey);
+      frameEl.removeEventListener("keydown", onKey);
     };
   }, []);
 
@@ -1311,8 +1329,10 @@ function SandTetris() {
         <canvas ref={canvasRef} />
         <div className="scanline" />
         <div className={`overlay${overlayHidden ? " hidden" : ""}`}>
-          SAND.TETRIS
-          <div className="sm">click to start</div>
+          {gameOverFlag ? "GAME OVER" : "SAND.TETRIS"}
+          <div className="sm">
+            {gameOverFlag ? `score ${String(score).padStart(4, "0")} · click to retry` : "click or press Enter"}
+          </div>
         </div>
       </div>
       <div className="info">
@@ -1371,7 +1391,12 @@ function Snake() {
     let nextDir: [number, number] = [1, 0];
     let food: [number, number] = [0, 0];
     let scoreLocal = 0;
-    let best = parseInt(localStorage.getItem("snakeBest") || "0", 10);
+    let best = 0;
+    try {
+      best = parseInt(localStorage.getItem("snakeBest") || "0", 10) || 0;
+    } catch {
+      // private mode / blocked storage — fall back to in-memory
+    }
     let running = false;
     let paused = false;
     let gameOver = false;
@@ -1476,7 +1501,11 @@ function Snake() {
         }
         if (gameOver && scoreLocal > best) {
           best = scoreLocal;
-          localStorage.setItem("snakeBest", String(best));
+          try {
+            localStorage.setItem("snakeBest", String(best));
+          } catch {
+            // ignore — score just won't persist
+          }
           setScore(best);
         }
       }
@@ -1487,33 +1516,41 @@ function Snake() {
     reset();
     render();
 
-    const onClick = () => {
+    const start = () => {
       if (gameOver) reset();
       if (!running) {
         running = true;
         setOverlayHidden(true);
+        frameEl.focus();
         lastTick = performance.now();
         rafId = requestAnimationFrame(step);
       }
     };
+    const onClick = () => start();
+    // scoped to frame so arrow keys don't leak into sand tetris
     const onKey = (e: KeyboardEvent) => {
+      if (!running && (e.key === "Enter" || e.key === " ")) {
+        e.preventDefault();
+        start();
+        return;
+      }
       if (!running) return;
       const k = e.key;
-      if (k === "ArrowLeft") nextDir = [-1, 0];
-      else if (k === "ArrowRight") nextDir = [1, 0];
-      else if (k === "ArrowUp") nextDir = [0, -1];
-      else if (k === "ArrowDown") nextDir = [0, 1];
+      if (k === "ArrowLeft") { e.preventDefault(); nextDir = [-1, 0]; }
+      else if (k === "ArrowRight") { e.preventDefault(); nextDir = [1, 0]; }
+      else if (k === "ArrowUp") { e.preventDefault(); nextDir = [0, -1]; }
+      else if (k === "ArrowDown") { e.preventDefault(); nextDir = [0, 1]; }
       else if (k.toLowerCase() === "p") paused = !paused;
     };
 
     frameEl.addEventListener("click", onClick);
-    window.addEventListener("keydown", onKey);
+    frameEl.addEventListener("keydown", onKey);
 
     return () => {
       running = false;
       cancelAnimationFrame(rafId);
       frameEl.removeEventListener("click", onClick);
-      window.removeEventListener("keydown", onKey);
+      frameEl.removeEventListener("keydown", onKey);
     };
   }, []);
 
@@ -1532,7 +1569,7 @@ function Snake() {
         <div className="scanline" />
         <div className={`overlay${overlayHidden ? " hidden" : ""}`}>
           SNAKE.EXE
-          <div className="sm">click to start</div>
+          <div className="sm">click or press Enter</div>
         </div>
       </div>
       <div className="info">
