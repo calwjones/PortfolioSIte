@@ -43,3 +43,6 @@ next-env.d.ts
 .claude/
 .idea/
 .vscode/
+
+# local scratch / reference material — never commit
+/tmp/
