@@ -582,7 +582,7 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   font-family: var(--f-px); font-size: 56px; color: var(--accent); letter-spacing: 0.04em;
 }
 .boot .bar {
-  width: 320px; height: 12px; border: 1px solid var(--line); background: #0a0e18;
+  width: min(320px, 80vw); height: 12px; border: 1px solid var(--line); background: #0a0e18;
   overflow: hidden; position: relative;
 }
 .boot .bar-fill {
@@ -661,7 +661,7 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   display: flex; flex-direction: column; justify-content: space-between;
   pointer-events: none;
 }
-.hero .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.hero .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
 .hero .top .brand {
   font-family: var(--f-mono);
   font-size: 12px; text-transform: uppercase; letter-spacing: 0.3em;
@@ -681,7 +681,7 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
 .hero .hero-mid { display: flex; flex-direction: column; gap: 16px; pointer-events: auto; }
 .hero h1.hero-title {
   font-family: var(--f-px);
-  font-size: clamp(76px, 13vw, 180px);
+  font-size: clamp(44px, 13vw, 180px);
   font-weight: 400; line-height: 0.85; letter-spacing: 0.01em;
   color: var(--fg);
   text-shadow: 0 0 20px rgba(255,91,31,0.4), 0 0 60px rgba(255,91,31,0.2);
@@ -697,6 +697,7 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   font-family: var(--f-mono); font-size: 10px; text-transform: uppercase;
   letter-spacing: 0.3em; color: var(--fg-mute);
   gap: 12px;
+  flex-wrap: wrap;
 }
 .hero .bottom .hint { pointer-events: auto; }
 .hero .toggle {
@@ -723,5 +724,41 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   .title-block h1 { font-size: 44px; }
   .hud { font-size: 10px; padding: 12px 16px; gap: 10px; flex-wrap: wrap; }
   .hud .slot .val { font-size: 16px; }
+  .section-head h2 { font-size: 26px; }
+  .run .name h3 { font-size: 30px; }
+  .run { padding: 18px 16px 16px; }
+  .boot h2 { font-size: 44px; }
   .worldmap .callout { font-size: 36px; }
+}
+
+@media (max-width: 480px) {
+  .wrap { padding: 24px 16px 80px; }
+  .hud { gap: 8px; padding: 10px 12px; }
+  .hud .slot .val { font-size: 14px; }
+  .hero .hero-mid { gap: 10px; }
+  .hero .sub { font-size: 11px; letter-spacing: 0.22em; line-height: 1.6; }
+  .hero .top .sys { font-size: 9px; letter-spacing: 0.22em; }
+  .title-block h1 { font-size: 36px; }
+  .title-block .meta { text-align: left; width: 100%; }
+  .section-head { margin: 48px 0 16px; }
+  .section-head h2 { font-size: 22px; }
+  .run .name h3 { font-size: 26px; }
+  .run .stats { grid-template-columns: repeat(2, 1fr); }
+  .run .desc { font-size: 12.5px; }
+  .char-stats { padding: 18px; }
+  .char-stats .quote { font-size: 14px; }
+  .char-loadout { gap: 6px; }
+  .char-loadout .chip { padding: 5px 8px; letter-spacing: 0.15em; }
+  .worldmap { padding: 20px; }
+  .worldmap .callout { font-size: 28px; }
+  .worldmap .big-btn { font-size: 10px; padding: 10px 12px; }
+  .toast { min-width: 220px; right: 16px; bottom: 16px; padding: 12px 16px 12px 48px; }
+  .toast::before { left: 12px; font-size: 26px; }
+  .minigame { padding: 16px; }
+  .minigame .info h3 { font-size: 24px; }
+}
+
+/* touch devices: cursor hints are misleading */
+@media (hover: none) {
+  .hero .bottom .hint { display: none; }
 }
