@@ -1675,8 +1675,9 @@ function WorldMap() {
           </a>
           <a
             className="big-btn"
-            href="/Callum_Jones_CV.docx"
-            download
+            href="/Callum_Jones_CV.pdf"
+            target="_blank"
+            rel="noreferrer"
           >
             Download CV <span className="arr">⤓</span>
           </a>
