@@ -11,7 +11,15 @@ import { TitleBlock } from "@/components/TitleBlock";
 import { Toast } from "@/components/Toast";
 import { WorldMap } from "@/components/WorldMap";
 import { Arcade } from "@/components/arcade/Arcade";
+import { INVENTORY } from "@/content/inventory";
+import { QUESTS } from "@/content/quests";
 import { RUNS } from "@/content/runs";
+
+const EQUIPPED = INVENTORY.filter((i) => !i.empty).length;
+const LOCKED = INVENTORY.filter((i) => i.empty).length;
+const ACTIVE_QUESTS = QUESTS.filter((q) => !q.done).length;
+const DONE_QUESTS = QUESTS.filter((q) => q.done).length;
+const pad2 = (n: number) => String(n).padStart(2, "0");
 
 export default function Page() {
   return (
@@ -24,14 +32,20 @@ export default function Page() {
         <CharacterCard />
         <SectionHead
           title="COMPLETED RUNS"
-          right={`0${RUNS.length} / 0${RUNS.length} · Hover for glow · Click to inspect`}
+          right={`${pad2(RUNS.length)} / ${pad2(RUNS.length)} · Hover for glow · Click to inspect`}
         />
         <Runs />
         <SectionHead title="ARCADE · PLAYABLE" right="Click screen to start · Arrow keys" />
         <Arcade />
-        <SectionHead title="INVENTORY · TECH" right="Hover for name · 18 equipped · 06 locked" />
+        <SectionHead
+          title="INVENTORY · TECH"
+          right={`Hover for name · ${pad2(EQUIPPED)} equipped · ${pad2(LOCKED)} locked`}
+        />
         <Inventory />
-        <SectionHead title="QUEST LOG · NOW" right="03 active · 03 completed this week" />
+        <SectionHead
+          title="QUEST LOG · NOW"
+          right={`${pad2(ACTIVE_QUESTS)} active · ${pad2(DONE_QUESTS)} completed`}
+        />
         <QuestLog />
         <SectionHead title="WORLD MAP · CONTACT" right="Teleport → message" />
         <WorldMap />

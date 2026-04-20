@@ -2,12 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { fireToast } from "@/lib/toast";
+import { INVENTORY } from "@/content/inventory";
+import { RUNS } from "@/content/runs";
+
+const EQUIPPED = INVENTORY.filter((i) => !i.empty).length;
 
 const LINES = [
   "Loading save slot 01...",
   "Loading profile...",
-  "Mounting projects (04 runs)...",
-  "Loading inventory (18 items)...",
+  `Mounting projects (${String(RUNS.length).padStart(2, "0")} runs)...`,
+  `Loading inventory (${EQUIPPED} items)...`,
   "Connecting — Bristol, UK...",
   "Ready.",
 ];

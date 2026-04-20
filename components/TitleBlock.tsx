@@ -1,16 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSessionTime } from "@/hooks/useSessionTime";
+import { RUNS } from "@/content/runs";
 
 export function TitleBlock() {
-  const [minutes, setMinutes] = useState(12);
-
-  useEffect(() => {
-    const id = window.setInterval(() => setMinutes((m) => m + 1), 60_000);
-    return () => window.clearInterval(id);
-  }, []);
-
-  const mm = String(minutes).padStart(2, "0");
+  const { h, m } = useSessionTime();
+  const playtime = `${String(h).padStart(2, "0")}h ${String(m).padStart(2, "0")}m`;
 
   return (
     <div className="title-block">
@@ -22,12 +17,12 @@ export function TitleBlock() {
       </div>
       <div className="meta">
         <div className="row">
-          <span className="lbl">Playtime </span>
-          <span className="val">0046h {mm}m</span>
+          <span className="lbl">Session </span>
+          <span className="val">{playtime}</span>
         </div>
         <div className="row">
-          <span className="lbl">Saves </span>
-          <span className="val">04 runs · 12 drafts</span>
+          <span className="lbl">Runs </span>
+          <span className="val">{String(RUNS.length).padStart(2, "0")} shipped</span>
         </div>
         <div className="row">
           <span className="lbl">Last save </span>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useAge } from "@/hooks/useAge";
+import { MAX_YEARS, SKILLS } from "@/content/skills";
 
 export function CharacterCard() {
   const age = useAge();
@@ -25,12 +26,15 @@ export function CharacterCard() {
           — open to CS graduate roles across the UK, remote or on-site.
         </p>
         <div className="stat-grid">
-          <StatBar label="FRONTEND" v={0.88} value={88} />
-          <StatBar label="BACKEND" v={0.85} value={85} cls="mana" />
-          <StatBar label="TOOLING" v={0.76} value={76} cls="focus" />
-          <StatBar label="GRAPHICS" v={0.72} value={72} cls="xp" />
-          <StatBar label="SYSTEMS" v={0.65} value={65} />
-          <StatBar label="DATABASES" v={0.62} value={62} cls="mana" />
+          {SKILLS.map((s) => (
+            <StatBar
+              key={s.label}
+              label={s.label}
+              years={s.years}
+              v={Math.min(1, s.years / MAX_YEARS)}
+              cls={s.cls}
+            />
+          ))}
         </div>
         <div className="char-loadout">
           <span className="chip eq">TypeScript</span>
@@ -57,26 +61,23 @@ export function CharacterCard() {
 
 function StatBar({
   label,
+  years,
   v,
-  value,
   cls,
-  color,
 }: {
   label: string;
+  years: number;
   v: number;
-  value: number;
   cls?: "focus" | "mana" | "xp";
-  color?: string;
 }) {
   const style: React.CSSProperties = { ["--v" as string]: v };
-  if (color) style.background = color;
   return (
     <div className="stat">
       <span className="label">{label}</span>
       <span className="bar">
         <span className={`fill${cls ? " " + cls : ""}`} style={style} />
       </span>
-      <span className="val">{value}</span>
+      <span className="val">{years}y</span>
     </div>
   );
 }
