@@ -5,6 +5,7 @@ import { Hero } from "@/components/Hero";
 import { Hud } from "@/components/Hud";
 import { Inventory } from "@/components/Inventory";
 import { QuestLog } from "@/components/QuestLog";
+import { RunModal } from "@/components/RunModal";
 import { Runs } from "@/components/Runs";
 import { SectionHead } from "@/components/SectionHead";
 import { TitleBlock } from "@/components/TitleBlock";
@@ -55,6 +56,7 @@ export default function Page() {
         </footer>
       </div>
       <Toast />
+      <RunModal />
       <EasterEggs />
     </>
   );

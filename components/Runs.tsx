@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { RUNS, type Run } from "@/content/runs";
-import { fireToast } from "@/lib/toast";
 
 export function Runs() {
   return (
@@ -30,10 +29,29 @@ function RunCard({ r }: { r: Run }) {
     return () => el.removeEventListener("pointermove", onMove);
   }, [r.dataGlow]);
 
-  const onClick = () => fireToast(r.achievement);
+  const onClick = () => {
+    history.pushState(null, "", `#run=${r.slug}`);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+  };
+
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick();
+    }
+  };
 
   return (
-    <article ref={ref} className="run" onClick={onClick} data-glow={r.dataGlow}>
+    <article
+      ref={ref}
+      className="run"
+      onClick={onClick}
+      onKeyDown={onKey}
+      role="button"
+      tabIndex={0}
+      aria-label={`Open log entry for ${r.name}`}
+      data-glow={r.dataGlow}
+    >
       <div className="top">
         <span className="rank">
           <span className={`medal${r.medalClass ? " " + r.medalClass : ""}`}>{r.medal}</span>

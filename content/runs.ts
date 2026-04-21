@@ -1,4 +1,17 @@
+export type CaseStudySection = {
+  heading: string;
+  body: string[];
+};
+
+export type CaseStudy = {
+  pitch: string;
+  stack: string[];
+  sections: CaseStudySection[];
+};
+
 export type Run = {
+  slug: string;
+  accentVar: "--accent" | "--accent-2" | "--xp" | "--health";
   dataGlow: string;
   achievement: string;
   medal: string;
@@ -16,10 +29,27 @@ export type Run = {
   achievements: { label: string; locked?: boolean }[];
   primary: { label: string; href?: string };
   source: { label: string; href?: string };
+  caseStudy?: CaseStudy;
+};
+
+const PLACEHOLDER_CASE_STUDY: CaseStudy = {
+  pitch: "Full log entry pending — I'm writing this one up properly soon.",
+  stack: [],
+  sections: [
+    {
+      heading: "MISSION LOG · INCOMPLETE",
+      body: [
+        "This entry hasn't been written up yet. Hit the source link to read the code in the meantime — the repo README has a short overview.",
+        "If you're a recruiter reading this and want the fuller story, the best path is to email me and I'll walk you through it.",
+      ],
+    },
+  ],
 };
 
 export const RUNS: Run[] = [
   {
+    slug: "matchsticked",
+    accentVar: "--accent",
     dataGlow: "rgba(255,91,31,0.18)",
     achievement: "First Ship",
     medal: "S",
@@ -42,8 +72,11 @@ export const RUNS: Run[] = [
     ],
     primary: { label: "▶ VIEW LIVE", href: "https://matchsticked.com" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/MoviePicker" },
+    caseStudy: PLACEHOLDER_CASE_STUDY,
   },
   {
+    slug: "gameengine",
+    accentVar: "--xp",
     dataGlow: "rgba(255,204,59,0.18)",
     achievement: "Built From Scratch",
     medal: "S",
@@ -66,8 +99,54 @@ export const RUNS: Run[] = [
     ],
     primary: { label: "▶ VIEW LOG", href: "https://github.com/calwjones/GameEngine" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/GameEngine" },
+    caseStudy: {
+      pitch:
+        "A game engine written from scratch in C++ — final-year dissertation at UWE Bristol. Around 10k lines, 200+ hours, no tutorial to hide behind.",
+      stack: ["C++", "CMake", "OpenGL", "GLFW"],
+      sections: [
+        {
+          heading: "MISSION",
+          body: [
+            "Build a small 2D game engine in C++ from scratch, for my final-year dissertation. The brief wasn't to compete with Unity or Godot — it was to understand what they're actually doing under the hood by reconstructing a stripped-down version myself.",
+            "By the end: roughly 10k lines of hand-written C++, a fixed-timestep main loop, an entity-component scene system, an OpenGL renderer, and a small playable demo that exercises every subsystem end-to-end.",
+          ],
+        },
+        {
+          heading: "PROBLEM",
+          body: [
+            "Every engine tutorial I'd followed before this abstracted the hard parts away — graphics contexts, memory layouts, how a pressed key actually ends up moving a sprite. I wanted the dissertation to force me to confront each of those layers personally. If I couldn't explain how input gets from GLFW to a script, the mark wouldn't be deserved.",
+            "Choosing C++ was pragmatic. It's the language of every engine I care about and my degree had leaned heavily on higher-level languages up to that point. This was the project I'd use to build the systems vocabulary I was missing.",
+          ],
+        },
+        {
+          heading: "APPROACH",
+          body: [
+            "The engine is built around a classic fixed-timestep game loop, an entity-component pattern for scene objects, and a modest OpenGL renderer via GLFW. Modules are compiled separately with CMake so I can iterate on individual subsystems without rebuilding the whole tree.",
+            "At its core: the main loop ticks update(dt) then render() across registered systems in order. An Entity is an ID with a bag of components — transform, sprite, collider, script — looked up from contiguous storage. Input events are captured at the window layer, translated to engine-agnostic Action enums, and dispatched to whichever scripts subscribed.",
+            "I kept the scope deliberately tight. No physics beyond AABB collision, no audio, no editor. Just enough skeleton for a small demo that proves every system works.",
+          ],
+        },
+        {
+          heading: "WHAT BROKE",
+          body: [
+            "Memory was the honest answer. The first month of work was littered with dangling pointers from my habit of writing TypeScript, where the GC forgives you. Moving to unique_ptr and RAII aggressively once I understood them cut the bug volume more than any specific fix.",
+            "CMake was the other villain. Getting a multi-module project to build cleanly across different machines cost days I hadn't budgeted for. In hindsight I'd have started from a known-good cross-platform template instead of rolling my own.",
+            "The third surprise was how much time rendering 'basic' quads took. I'd underestimated the cost of getting OpenGL state right — shader compilation, VAOs, texture binding. Game logic turned out to be the cheap part.",
+          ],
+        },
+        {
+          heading: "WHAT I LEARNED",
+          body: [
+            "Abstractions leak in specific, predictable ways — and reading other people's engine code with a debugger attached teaches more than any book chapter. Reconstructing a system from first principles is the real deliverable, even if the result never ships.",
+            "Next time: smaller scope, earlier playable prototype, and test scaffolding from day one instead of bolted on at month three.",
+          ],
+        },
+      ],
+    },
   },
   {
+    slug: "tetris",
+    accentVar: "--accent-2",
     dataGlow: "rgba(107,91,255,0.2)",
     achievement: "Canvas Wrangler",
     medal: "A",
@@ -90,8 +169,11 @@ export const RUNS: Run[] = [
     ],
     primary: { label: "▶ PLAY DEMO ↓" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/Tetris" },
+    caseStudy: PLACEHOLDER_CASE_STUDY,
   },
   {
+    slug: "calculator",
+    accentVar: "--health",
     dataGlow: "rgba(95,214,147,0.18)",
     achievement: "Shipped & Forgot",
     medal: "C",
@@ -114,5 +196,6 @@ export const RUNS: Run[] = [
     ],
     primary: { label: "▶ VIEW LOG", href: "https://github.com/calwjones/Calculator" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/Calculator" },
+    caseStudy: PLACEHOLDER_CASE_STUDY,
   },
 ];
