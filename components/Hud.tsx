@@ -46,6 +46,17 @@ export function Hud() {
         <span className="val" style={{ color: "var(--xp)" }}>{String(EQUIPPED).padStart(2, "0")}</span>
       </div>
       <div className="spacer" />
+      <button
+        type="button"
+        className="hud-cmd"
+        onClick={() => window.dispatchEvent(new CustomEvent("sav:terminal:toggle"))}
+        aria-label="Open command line"
+        title="Open command line (shortcut: /)"
+      >
+        <span className="lbl">▸</span>
+        <span className="val">CMD</span>
+        <span className="kbd">/</span>
+      </button>
       <div className="slot">
         <span className="save-dot" />
         <span className="lbl">Auto-saving</span>

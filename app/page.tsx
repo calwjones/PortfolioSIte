@@ -8,6 +8,7 @@ import { QuestLog } from "@/components/QuestLog";
 import { RunModal } from "@/components/RunModal";
 import { Runs } from "@/components/Runs";
 import { SectionHead } from "@/components/SectionHead";
+import { Terminal } from "@/components/Terminal";
 import { TitleBlock } from "@/components/TitleBlock";
 import { Toast } from "@/components/Toast";
 import { WorldMap } from "@/components/WorldMap";
@@ -57,6 +58,7 @@ export default function Page() {
       </div>
       <Toast />
       <RunModal />
+      <Terminal />
       <EasterEggs />
     </>
   );
