@@ -152,6 +152,32 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   text-shadow: 0 0 24px rgba(255,91,31,0.6);
   z-index: 1;
 }
+.char-avatar .frame .pixel-avatar {
+  width: 70%;
+  height: auto;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 0 16px rgba(255,91,31,0.45));
+  z-index: 1;
+  animation: avatar-bob 2.6s ease-in-out infinite;
+}
+@keyframes avatar-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2%); }
+}
+.char-avatar .frame .pixel-avatar .eye {
+  transform-origin: center;
+  animation: avatar-blink 5.5s infinite;
+}
+@keyframes avatar-blink {
+  0%, 93%, 100% { transform: scaleY(1); }
+  95%, 98%      { transform: scaleY(0.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .char-avatar .frame .pixel-avatar,
+  .char-avatar .frame .pixel-avatar .eye { animation: none; }
+}
 .char-avatar .frame .corner {
   position: absolute; top: 8px; right: 8px;
   font-family: var(--f-mono); font-size: 9px;

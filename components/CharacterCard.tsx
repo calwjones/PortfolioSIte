@@ -2,6 +2,7 @@
 
 import { useAge } from "@/hooks/useAge";
 import { MAX_YEARS, SKILLS } from "@/content/skills";
+import { PixelAvatar } from "./PixelAvatar";
 
 export function CharacterCard() {
   const age = useAge();
@@ -11,7 +12,7 @@ export function CharacterCard() {
         <div>
           <div className="frame">
             <span className="corner">LV {age}</span>
-            <span className="glyph">C</span>
+            <PixelAvatar />
           </div>
           <div className="handle">
             callum<span className="at">.jones</span>
