@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { unlock } from "@/lib/achievements";
 
 export function Snake() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -134,6 +135,7 @@ export function Snake() {
             scoreLocal += 10;
             placeFood();
             tickMs = Math.max(70, tickMs - 2);
+            if (scoreLocal >= 100) unlock("snake-charmer");
           } else {
             snake.pop();
           }

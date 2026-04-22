@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fireToast } from "@/lib/toast";
+import { unlock } from "@/lib/achievements";
 import { INVENTORY } from "@/content/inventory";
 import { RUNS } from "@/content/runs";
 
@@ -32,7 +32,7 @@ export function BootScreen() {
     const t1 = window.setTimeout(() => setHidden(true), 1400);
     const t2 = window.setTimeout(() => {
       setRemoved(true);
-      fireToast("First Visit");
+      unlock("first-visit");
     }, 2000);
     return () => {
       window.clearTimeout(t1);

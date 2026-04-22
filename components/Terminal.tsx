@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { RUNS } from "@/content/runs";
 import { useSessionTime } from "@/hooks/useSessionTime";
+import { ACHIEVEMENTS, getUnlocked, unlock } from "@/lib/achievements";
 
 type Line = { kind: "cmd" | "out" | "err"; text: string };
 
@@ -12,6 +13,7 @@ const COMMANDS: { usage: string; desc: string }[] = [
   { usage: "open <slug>", desc: "open a run log" },
   { usage: "play <tetris|snake>", desc: "scroll to arcade" },
   { usage: "stats", desc: "session + totals" },
+  { usage: "achievements", desc: "unlocked so far" },
   { usage: "contact", desc: "jump to contact" },
   { usage: "cv", desc: "open CV (PDF)" },
   { usage: "whoami", desc: "one-line bio" },
@@ -133,11 +135,26 @@ export function Terminal() {
         const hh = String(h).padStart(2, "0");
         const mm = String(m).padStart(2, "0");
         const ss = String(s).padStart(2, "0");
+        const got = getUnlocked().size;
         push([
-          { kind: "out", text: `  session : ${hh}:${mm}:${ss}` },
-          { kind: "out", text: `  runs    : ${RUNS.length} shipped` },
-          { kind: "out", text: `  zone    : Bristol, UK` },
+          { kind: "out", text: `  session       : ${hh}:${mm}:${ss}` },
+          { kind: "out", text: `  runs          : ${RUNS.length} shipped` },
+          { kind: "out", text: `  achievements  : ${got}/${ACHIEVEMENTS.length}` },
+          { kind: "out", text: `  zone          : Bristol, UK` },
         ]);
+        break;
+      }
+
+      case "achievements":
+      case "ach": {
+        const got = getUnlocked();
+        push({ kind: "out", text: `  ${got.size}/${ACHIEVEMENTS.length} unlocked` });
+        push(
+          ACHIEVEMENTS.map((a) => ({
+            kind: "out" as const,
+            text: `  ${got.has(a.id) ? "[✓]" : "[ ]"} ${a.name.padEnd(22)}${got.has(a.id) ? "" : a.hint}`,
+          }))
+        );
         break;
       }
 
@@ -170,7 +187,9 @@ export function Terminal() {
 
       default:
         push({ kind: "err", text: `command not found: '${name}'. try 'help'.` });
+        return;
     }
+    unlock("cli-wizard");
   };
 
   const onSubmit = (e: React.FormEvent) => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { fireToast } from "@/lib/toast";
+import { unlock } from "@/lib/achievements";
 
 const KONAMI = [
   "ArrowUp",
@@ -28,7 +28,7 @@ export function EasterEggs() {
         kIdx++;
         if (kIdx === KONAMI.length) {
           kIdx = 0;
-          fireToast("God Mode Enabled");
+          unlock("cheat-code");
           document.documentElement.style.setProperty("--accent", "#5fd693");
           document.documentElement.style.setProperty("--accent-2", "#ffcc3b");
         }
@@ -39,7 +39,7 @@ export function EasterEggs() {
       if (e.key.length === 1) {
         typeBuf = (typeBuf + e.key.toLowerCase()).slice(-NAME_TARGET.length);
         if (typeBuf === NAME_TARGET) {
-          fireToast("Contact Unlocked");
+          unlock("namedrop");
           const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           if (!reduced) {
             document.body.style.transition = "filter 1s";

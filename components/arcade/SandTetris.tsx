@@ -7,6 +7,7 @@ import {
   SAND_PIECES,
   SAND_PIECE_NAMES,
 } from "@/content/sand";
+import { unlock } from "@/lib/achievements";
 
 export function SandTetris() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -217,6 +218,7 @@ export function SandTetris() {
       if (clearedCount) {
         scoreRef.current += Math.max(5, Math.floor(clearedCount / 5));
         setScore(scoreRef.current);
+        if (scoreRef.current >= 20) unlock("sand-artist");
         // settle after clearing
         for (let i = 0; i < 10; i++) updateSand();
       }

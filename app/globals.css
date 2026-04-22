@@ -569,6 +569,9 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   flex-wrap: wrap; gap: 8px;
 }
 
+.hud .slot.ach-slot .lbl { color: var(--xp); font-family: var(--f-px); font-size: 16px; }
+.hud .slot.ach-slot .val { color: var(--xp); }
+
 /* ========== HUD CMD button ========== */
 .hud-cmd {
   display: inline-flex; align-items: center; gap: 8px;

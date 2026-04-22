@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAge } from "@/hooks/useAge";
 import { useSessionTime } from "@/hooks/useSessionTime";
+import { useAchievements } from "@/hooks/useAchievements";
 import { INVENTORY } from "@/content/inventory";
 import { RUNS } from "@/content/runs";
 
@@ -12,6 +13,7 @@ export function Hud() {
   const [clock, setClock] = useState("BRISTOL");
   const age = useAge();
   const { h, m } = useSessionTime();
+  const { unlocked, total } = useAchievements();
 
   useEffect(() => {
     const tick = () => {
@@ -44,6 +46,15 @@ export function Hud() {
       <div className="slot">
         <span className="lbl">Tech</span>
         <span className="val" style={{ color: "var(--xp)" }}>{String(EQUIPPED).padStart(2, "0")}</span>
+      </div>
+      <div
+        className="slot ach-slot"
+        title={`Achievements unlocked (type 'achievements' in CMD to list)`}
+      >
+        <span className="lbl" aria-hidden="true">★</span>
+        <span className="val">
+          {String(unlocked.size).padStart(2, "0")}/{String(total).padStart(2, "0")}
+        </span>
       </div>
       <div className="spacer" />
       <button
