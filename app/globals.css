@@ -557,6 +557,14 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   overflow: hidden;
 }
 .map-frame svg { width: 100%; height: 100%; display: block; }
+.map-frame .map-pin { outline: none; transition: opacity .2s; }
+.map-frame .map-pin circle:nth-child(3) { transition: r .2s, stroke-width .2s; }
+.map-frame .map-pin:hover circle:nth-child(3),
+.map-frame .map-pin:focus-visible circle:nth-child(3) {
+  r: 10;
+  stroke-width: 1.5;
+}
+.map-frame .map-pin:focus-visible text { text-decoration: underline; }
 
 /* ========== FOOTER ========== */
 .savefooter {

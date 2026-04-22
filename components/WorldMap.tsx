@@ -2,8 +2,30 @@
 
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
+type MapPin = {
+  slug: string;
+  label: string;
+  x: number;
+  y: number;
+  cssVar: "--accent" | "--accent-2" | "--xp" | "--health";
+  anchor?: "start" | "end";
+};
+
+// positions sit in the SVG viewBox (0 0 400 300) — scatter around the landmasses
+const PINS: MapPin[] = [
+  { slug: "matchsticked", label: "MATCHSTICKED", x: 295, y: 80, cssVar: "--accent" },
+  { slug: "gameengine",   label: "GAMEENGINE",   x: 340, y: 170, cssVar: "--xp", anchor: "end" },
+  { slug: "tetris",       label: "SAND.TETRIS",  x: 245, y: 250, cssVar: "--accent-2" },
+  { slug: "calculator",   label: "CALCULATOR",   x: 40,  y: 260, cssVar: "--health" },
+];
+
 export function WorldMap() {
   const reduced = usePrefersReducedMotion();
+
+  const openRun = (slug: string) => {
+    window.location.hash = `run=${slug}`;
+  };
+
   return (
     <div className="worldmap">
       <div>
@@ -81,8 +103,18 @@ export function WorldMap() {
             stroke="#2a3448"
             strokeWidth="1"
           />
+
+          {/* Home marker — Bristol */}
           <circle cx="150" cy="170" r="3" fill="#ff5b1f" />
-          <circle cx="150" cy="170" r="8" fill="none" stroke="#ff5b1f" strokeWidth="1" opacity="0.6">
+          <circle
+            cx="150"
+            cy="170"
+            r="8"
+            fill="none"
+            stroke="#ff5b1f"
+            strokeWidth="1"
+            opacity="0.6"
+          >
             {!reduced && (
               <>
                 <animate attributeName="r" from="8" to="20" dur="2s" repeatCount="indefinite" />
@@ -90,13 +122,82 @@ export function WorldMap() {
               </>
             )}
           </circle>
-          <text x="158" y="165" fill="#ff5b1f" fontFamily="JetBrains Mono, monospace" fontSize="9" letterSpacing="2">
+          <text
+            x="158"
+            y="165"
+            fill="#ff5b1f"
+            fontFamily="JetBrains Mono, monospace"
+            fontSize="9"
+            letterSpacing="2"
+          >
             BRISTOL
           </text>
-          <text x="20" y="290" fill="#4a4a48" fontFamily="JetBrains Mono, monospace" fontSize="8" letterSpacing="2">
+
+          {/* Fast-travel project pins */}
+          {PINS.map((p) => {
+            const color = `var(${p.cssVar})`;
+            const textAnchor = p.anchor ?? "start";
+            const textX = textAnchor === "end" ? p.x - 8 : p.x + 8;
+            return (
+              <g
+                key={p.slug}
+                className="map-pin"
+                onClick={() => openRun(p.slug)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    openRun(p.slug);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Fast-travel to ${p.label} log`}
+                data-cursor="pin"
+              >
+                <circle cx={p.x} cy={p.y} r={10} fill="transparent" />
+                <circle cx={p.x} cy={p.y} r={3} fill={color} />
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={6}
+                  fill="none"
+                  stroke={color}
+                  strokeWidth={1}
+                  opacity={0.5}
+                />
+                <text
+                  x={textX}
+                  y={p.y + 3}
+                  fill={color}
+                  fontFamily="JetBrains Mono, monospace"
+                  fontSize="8"
+                  letterSpacing="1.5"
+                  textAnchor={textAnchor}
+                >
+                  {p.label}
+                </text>
+              </g>
+            );
+          })}
+
+          <text
+            x="20"
+            y="290"
+            fill="#4a4a48"
+            fontFamily="JetBrains Mono, monospace"
+            fontSize="8"
+            letterSpacing="2"
+          >
             UWE BRISTOL · GRAD JUL 2026
           </text>
-          <text x="240" y="290" fill="#4a4a48" fontFamily="JetBrains Mono, monospace" fontSize="8" letterSpacing="2">
+          <text
+            x="240"
+            y="290"
+            fill="#4a4a48"
+            fontFamily="JetBrains Mono, monospace"
+            fontSize="8"
+            letterSpacing="2"
+          >
             ZONE: UK · OPEN TO ROLES
           </text>
         </svg>
