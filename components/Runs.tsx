@@ -50,6 +50,7 @@ function RunCard({ r }: { r: Run }) {
       role="button"
       tabIndex={0}
       aria-label={`Open log entry for ${r.name}`}
+      data-cursor="inspect"
       data-glow={r.dataGlow}
     >
       <div className="top">

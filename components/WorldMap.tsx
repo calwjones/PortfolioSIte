@@ -16,7 +16,11 @@ export function WorldMap() {
           happy to relocate for the right role.
         </p>
         <div className="buttons">
-          <a className="big-btn primary" href="mailto:calwjones12@gmail.com">
+          <a
+            className="big-btn primary"
+            href="mailto:calwjones12@gmail.com"
+            data-cursor="contact"
+          >
             calwjones12@gmail.com <span className="arr">→</span>
           </a>
           <a
@@ -24,6 +28,7 @@ export function WorldMap() {
             href="https://www.linkedin.com/in/callum-jones-a252b3389/"
             target="_blank"
             rel="noreferrer"
+            data-cursor="external"
           >
             LinkedIn <span className="arr">↗</span>
           </a>
@@ -32,6 +37,7 @@ export function WorldMap() {
             href="https://github.com/calwjones"
             target="_blank"
             rel="noreferrer"
+            data-cursor="external"
           >
             GitHub <span className="arr">↗</span>
           </a>
@@ -40,6 +46,7 @@ export function WorldMap() {
             href="https://matchsticked.com"
             target="_blank"
             rel="noreferrer"
+            data-cursor="external"
           >
             Matchsticked <span className="arr">↗</span>
           </a>
@@ -48,6 +55,7 @@ export function WorldMap() {
             href="/Callum_Jones_CV.pdf"
             target="_blank"
             rel="noreferrer"
+            data-cursor="external"
           >
             Download CV <span className="arr">⤓</span>
           </a>

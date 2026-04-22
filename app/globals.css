@@ -572,6 +572,86 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
 .hud .slot.ach-slot .lbl { color: var(--xp); font-family: var(--f-px); font-size: 16px; }
 .hud .slot.ach-slot .val { color: var(--xp); }
 
+/* ========== CUSTOM CURSOR ========== */
+body.has-custom-cursor,
+body.has-custom-cursor * { cursor: none !important; }
+body.has-custom-cursor input,
+body.has-custom-cursor textarea { cursor: text !important; }
+
+.custom-cursor {
+  position: fixed; top: 0; left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .18s;
+  will-change: transform;
+}
+.custom-cursor.visible { opacity: 1; }
+.custom-cursor .ring {
+  width: 22px; height: 22px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width .18s cubic-bezier(0.16,1,0.3,1),
+              height .18s cubic-bezier(0.16,1,0.3,1),
+              border-color .18s,
+              border-width .18s,
+              background .18s;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--accent) 20%, transparent), transparent 70%);
+}
+.custom-cursor.pressed .ring { transform: translate(-50%, -50%) scale(0.85); }
+
+.custom-cursor .label {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--f-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .15s, color .18s;
+  text-shadow: 0 0 6px rgba(0,0,0,0.6);
+}
+
+/* per-state overrides */
+.custom-cursor.state-inspect .ring {
+  width: 68px; height: 68px; border-width: 1.5px;
+}
+.custom-cursor.state-inspect .label { opacity: 1; }
+
+.custom-cursor.state-play .ring {
+  width: 56px; height: 56px;
+  border-color: var(--health);
+}
+.custom-cursor.state-play .label { opacity: 1; color: var(--health); }
+
+.custom-cursor.state-external .ring {
+  width: 52px; height: 52px;
+  border-color: var(--accent-2);
+}
+.custom-cursor.state-external .label { opacity: 1; color: var(--accent-2); }
+
+.custom-cursor.state-contact .ring {
+  width: 58px; height: 58px;
+  border-color: var(--xp);
+}
+.custom-cursor.state-contact .label { opacity: 1; color: var(--xp); }
+
+.custom-cursor.state-close .ring {
+  width: 48px; height: 48px;
+  border-color: var(--danger);
+}
+.custom-cursor.state-close .label { opacity: 1; color: var(--danger); }
+
+.custom-cursor.state-pin .ring {
+  width: 54px; height: 54px;
+  border-color: var(--accent);
+  border-style: dashed;
+}
+.custom-cursor.state-pin .label { opacity: 1; }
+
 /* ========== HUD CMD button ========== */
 .hud-cmd {
   display: inline-flex; align-items: center; gap: 8px;

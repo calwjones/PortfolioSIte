@@ -10,6 +10,7 @@ import { Runs } from "@/components/Runs";
 import { SectionHead } from "@/components/SectionHead";
 import { Terminal } from "@/components/Terminal";
 import { AchievementWatchers } from "@/components/AchievementWatchers";
+import { CustomCursor } from "@/components/CustomCursor";
 import { TitleBlock } from "@/components/TitleBlock";
 import { Toast } from "@/components/Toast";
 import { WorldMap } from "@/components/WorldMap";
@@ -62,6 +63,7 @@ export default function Page() {
       <Terminal />
       <EasterEggs />
       <AchievementWatchers />
+      <CustomCursor />
     </>
   );
 }

@@ -397,6 +397,7 @@ export function SandTetris() {
         role="button"
         tabIndex={0}
         aria-label="Start Sand Tetris"
+        data-cursor="play"
       >
         <canvas ref={canvasRef} />
         <div className="scanline" />

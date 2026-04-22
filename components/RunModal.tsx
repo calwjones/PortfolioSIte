@@ -85,6 +85,7 @@ export function RunModal() {
           className="run-modal-close"
           onClick={close}
           aria-label="Close log entry"
+          data-cursor="close"
         >
           ×
         </button>

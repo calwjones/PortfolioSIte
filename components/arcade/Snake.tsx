@@ -206,6 +206,7 @@ export function Snake() {
         role="button"
         tabIndex={0}
         aria-label="Start Snake"
+        data-cursor="play"
       >
         <canvas ref={canvasRef} width={160} height={200} />
         <div className="scanline" />
