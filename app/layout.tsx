@@ -23,8 +23,7 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
-// swap once deployed — Vercel will give you a .vercel.app url on push
-const SITE_URL = "https://callumjones.dev";
+const SITE_URL = "https://calwjones.com";
 const TITLE = "Callum Jones — Portfolio";
 const DESC =
   "Callum Jones — final-year CS student at UWE Bristol. Portfolio as an RPG save file.";
