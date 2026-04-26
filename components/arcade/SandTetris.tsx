@@ -375,8 +375,43 @@ export function SandTetris() {
       }
     };
 
+    // touch: tap to start / rotate, swipe to move
+    let tStartX = 0, tStartY = 0;
+    const TAP_MAX = 12;
+    const SWIPE_MIN = 24;
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType !== "touch") return;
+      tStartX = e.clientX;
+      tStartY = e.clientY;
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (e.pointerType !== "touch") return;
+      const dx = e.clientX - tStartX;
+      const dy = e.clientY - tStartY;
+      const dist = Math.hypot(dx, dy);
+      if (dist < TAP_MAX) {
+        if (!running) { start(); return; }
+        if (!piece) return;
+        const rotated = rotate(piece.matrix);
+        if (!collidesSand(rotated, piece.x, piece.y)) piece.matrix = rotated;
+        return;
+      }
+      if (!running || !piece || dist < SWIPE_MIN) return;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        const step = dx > 0 ? 1 : -1;
+        if (!collidesSand(piece.matrix, piece.x + step, piece.y)) piece.x += step;
+      } else if (dy > 0) {
+        if (!collidesSand(piece.matrix, piece.x, piece.y + 1)) piece.y += 1;
+      } else {
+        const rotated = rotate(piece.matrix);
+        if (!collidesSand(rotated, piece.x, piece.y)) piece.matrix = rotated;
+      }
+    };
+
     frameEl.addEventListener("click", onClick);
     frameEl.addEventListener("keydown", onKey);
+    frameEl.addEventListener("pointerdown", onPointerDown);
+    frameEl.addEventListener("pointerup", onPointerUp);
     render();
 
     return () => {
@@ -384,6 +419,8 @@ export function SandTetris() {
       cancelAnimationFrame(rafId);
       frameEl.removeEventListener("click", onClick);
       frameEl.removeEventListener("keydown", onKey);
+      frameEl.removeEventListener("pointerdown", onPointerDown);
+      frameEl.removeEventListener("pointerup", onPointerUp);
     };
   }, []);
 

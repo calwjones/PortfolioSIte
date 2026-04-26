@@ -185,14 +185,38 @@ export function Snake() {
       else if (k.toLowerCase() === "p") paused = !paused;
     };
 
+    // touch: tap to start, swipe to steer
+    let tStartX = 0, tStartY = 0;
+    const TAP_MAX = 12;
+    const SWIPE_MIN = 24;
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType !== "touch") return;
+      tStartX = e.clientX;
+      tStartY = e.clientY;
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (e.pointerType !== "touch") return;
+      const dx = e.clientX - tStartX;
+      const dy = e.clientY - tStartY;
+      const dist = Math.hypot(dx, dy);
+      if (dist < TAP_MAX) { start(); return; }
+      if (!running || dist < SWIPE_MIN) return;
+      if (Math.abs(dx) > Math.abs(dy)) nextDir = dx > 0 ? [1, 0] : [-1, 0];
+      else nextDir = dy > 0 ? [0, 1] : [0, -1];
+    };
+
     frameEl.addEventListener("click", onClick);
     frameEl.addEventListener("keydown", onKey);
+    frameEl.addEventListener("pointerdown", onPointerDown);
+    frameEl.addEventListener("pointerup", onPointerUp);
 
     return () => {
       running = false;
       cancelAnimationFrame(rafId);
       frameEl.removeEventListener("click", onClick);
       frameEl.removeEventListener("keydown", onKey);
+      frameEl.removeEventListener("pointerdown", onPointerDown);
+      frameEl.removeEventListener("pointerup", onPointerUp);
     };
   }, []);
 
