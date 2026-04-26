@@ -1,4 +1,3 @@
-import { BootScreen } from "@/components/BootScreen";
 import { CharacterCard } from "@/components/CharacterCard";
 import { EasterEggs } from "@/components/EasterEggs";
 import { Hero } from "@/components/Hero";
@@ -28,7 +27,6 @@ const pad2 = (n: number) => String(n).padStart(2, "0");
 export default function Page() {
   return (
     <>
-      <BootScreen />
       <Hero />
       <Hud />
       <div className="wrap">

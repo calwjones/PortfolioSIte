@@ -988,35 +988,6 @@ body.has-custom-cursor textarea { cursor: text !important; }
   .run-modal { animation: none; }
 }
 
-/* ========== BOOT ========== */
-.boot {
-  position: fixed; inset: 0; z-index: 100;
-  background: var(--bg);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 20px;
-  transition: opacity .5s;
-}
-.boot.hidden { opacity: 0; pointer-events: none; }
-.boot h2 {
-  font-family: var(--f-px); font-size: 56px; color: var(--accent); letter-spacing: 0.04em;
-}
-.boot .bar {
-  width: min(320px, 80vw); height: 12px; border: 1px solid var(--line); background: #0a0e18;
-  overflow: hidden; position: relative;
-}
-.boot .bar-fill {
-  position: absolute; inset: 0; background: var(--accent);
-  transform-origin: left; transform: scaleX(0);
-  animation: boot 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-@keyframes boot { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
-.boot .lines {
-  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.15em; color: var(--fg-dim);
-  text-align: center; line-height: 1.8;
-}
-.boot .lines .l { opacity: 0; animation: lineIn 0.1s forwards; }
-@keyframes lineIn { to { opacity: 1; } }
-
 /* ========== TOAST ========== */
 .toast {
   position: fixed; bottom: 24px; right: 24px; z-index: 60;
@@ -1050,7 +1021,6 @@ body.has-custom-cursor textarea { cursor: text !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .boot { display: none; }
   .stat .bar .fill { animation: none; transform: scaleX(var(--v, 1)); }
   .save-dot,
   .quest.active .box::before,

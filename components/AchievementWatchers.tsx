@@ -7,6 +7,7 @@ import { unlock } from "@/lib/achievements";
 // Renders nothing; must live inside the page tree.
 export function AchievementWatchers() {
   useEffect(() => {
+    unlock("first-visit");
     const footer = document.querySelector(".savefooter");
     const worldmap = document.querySelector(".worldmap");
     if (!footer || !worldmap) return;
