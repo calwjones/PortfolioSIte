@@ -83,7 +83,7 @@ const personLd = {
     "https://www.linkedin.com/in/callum-jones-a252b3389/",
     "https://matchsticked.com",
   ],
-  email: "mailto:calwjones12@gmail.com",
+  email: "calwjones12@gmail.com",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Bristol",
@@ -115,7 +115,10 @@ export default function RootLayout({
       className={`${px.variable} ${sans.variable} ${mono.variable}`}
     >
       <body>
-        <script type="application/ld+json">{JSON.stringify(personLd)}</script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
+        />
         {children}
       </body>
     </html>
