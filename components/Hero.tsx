@@ -205,17 +205,33 @@ export function Hero() {
     };
     frame();
 
-    // pause shader when tab is hidden — saves battery + GPU
-    const onVis = () => {
-      if (document.hidden) {
-        running = false;
-        cancelAnimationFrame(rafId);
-      } else if (!running) {
+    // pause shader when tab is hidden or hero is scrolled off-screen
+    let tabVisible = !document.hidden;
+    let inView = true;
+    const sync = () => {
+      const next = tabVisible && inView;
+      if (next && !running) {
         running = true;
         rafId = requestAnimationFrame(frame);
+      } else if (!next && running) {
+        running = false;
+        cancelAnimationFrame(rafId);
       }
     };
+    const onVis = () => {
+      tabVisible = !document.hidden;
+      sync();
+    };
     document.addEventListener("visibilitychange", onVis);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        inView = entries[0]?.isIntersecting ?? true;
+        sync();
+      },
+      { threshold: 0 }
+    );
+    io.observe(section);
 
     return () => {
       running = false;
@@ -224,6 +240,7 @@ export function Hero() {
       section.removeEventListener("pointermove", onMove);
       section.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("visibilitychange", onVis);
+      io.disconnect();
     };
   }, [reduced]);
 
