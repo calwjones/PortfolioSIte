@@ -30,6 +30,7 @@ export type Run = {
   primary: { label: string; href?: string };
   source: { label: string; href?: string };
   caseStudy?: CaseStudy;
+  mapPin?: { x: number; y: number; label?: string; anchor?: "start" | "end" };
 };
 
 const MATCHSTICKED_CASE_STUDY: CaseStudy = {
@@ -186,6 +187,7 @@ export const RUNS: Run[] = [
     primary: { label: "▶ VIEW LIVE", href: "https://matchsticked.com" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/MoviePicker" },
     caseStudy: MATCHSTICKED_CASE_STUDY,
+    mapPin: { x: 295, y: 80 },
   },
   {
     slug: "gameengine",
@@ -212,6 +214,7 @@ export const RUNS: Run[] = [
     ],
     primary: { label: "▶ VIEW LOG", href: "https://github.com/calwjones/GameEngine" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/GameEngine" },
+    mapPin: { x: 340, y: 170, anchor: "end" },
     caseStudy: {
       pitch:
         "A game engine written from scratch in C++ — final-year dissertation at UWE Bristol. Around 10k lines, 200+ hours, no tutorial to hide behind.",
@@ -283,6 +286,7 @@ export const RUNS: Run[] = [
     primary: { label: "▶ PLAY DEMO ↓" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/Tetris" },
     caseStudy: TETRIS_CASE_STUDY,
+    mapPin: { x: 245, y: 250, label: "SAND.TETRIS" },
   },
   {
     slug: "calculator",
@@ -310,5 +314,6 @@ export const RUNS: Run[] = [
     primary: { label: "▶ VIEW LOG", href: "https://github.com/calwjones/Calculator" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/Calculator" },
     caseStudy: CALCULATOR_CASE_STUDY,
+    mapPin: { x: 40, y: 260 },
   },
 ];

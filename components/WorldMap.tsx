@@ -1,23 +1,16 @@
 "use client";
 
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { RUNS } from "@/content/runs";
 
-type MapPin = {
-  slug: string;
-  label: string;
-  x: number;
-  y: number;
-  cssVar: "--accent" | "--accent-2" | "--xp" | "--health";
-  anchor?: "start" | "end";
-};
-
-// positions sit in the SVG viewBox (0 0 400 300) — scatter around the landmasses
-const PINS: MapPin[] = [
-  { slug: "matchsticked", label: "MATCHSTICKED", x: 295, y: 80, cssVar: "--accent" },
-  { slug: "gameengine",   label: "GAMEENGINE",   x: 340, y: 170, cssVar: "--xp", anchor: "end" },
-  { slug: "tetris",       label: "SAND.TETRIS",  x: 245, y: 250, cssVar: "--accent-2" },
-  { slug: "calculator",   label: "CALCULATOR",   x: 40,  y: 260, cssVar: "--health" },
-];
+const PINS = RUNS.filter((r) => r.mapPin).map((r) => ({
+  slug: r.slug,
+  label: r.mapPin!.label ?? r.name.toUpperCase(),
+  x: r.mapPin!.x,
+  y: r.mapPin!.y,
+  cssVar: r.accentVar,
+  anchor: r.mapPin!.anchor,
+}));
 
 export function WorldMap() {
   const reduced = usePrefersReducedMotion();
