@@ -8,6 +8,7 @@ export function Hero() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [sysTime, setSysTime] = useState("—:—:—");
   const [crtOn, setCrtOn] = useState(true);
+  const [glFailed, setGlFailed] = useState(false);
   const crtRef = useRef(1);
   const reduced = usePrefersReducedMotion();
 
@@ -35,7 +36,7 @@ export function Hero() {
       premultipliedAlpha: false,
     });
     if (!gl) {
-      canvas.style.display = "none";
+      setGlFailed(true);
       return;
     }
 
@@ -246,7 +247,11 @@ export function Hero() {
 
   return (
     <section className="hero" ref={sectionRef}>
-      {reduced ? <div className="hero-static-bg" /> : <canvas ref={canvasRef} />}
+      {reduced || glFailed ? (
+        <div className="hero-static-bg" />
+      ) : (
+        <canvas ref={canvasRef} />
+      )}
       <div className="content">
         <div className="top">
           <div className="brand">
@@ -254,7 +259,7 @@ export function Hero() {
             CALLUM.SAV / v3
           </div>
           <div className="sys">
-            SIGNAL NTSC · 60HZ<br />
+            SIGNAL PAL · 50HZ<br />
             BRISTOL · 51.45°N 2.59°W<br />
             {sysTime}
           </div>
@@ -268,12 +273,34 @@ export function Hero() {
           <p className="sub">
             Final-year CS student · UWE Bristol · graduating July 2026 · open to CS roles
           </p>
+          <div className="hero-actions">
+            <a
+              className="hero-cta primary"
+              href="/Callum_Jones_CV.pdf"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="external"
+            >
+              DOWNLOAD CV <span className="arr">⤓</span>
+            </a>
+            <a
+              className="hero-cta"
+              href="https://matchsticked.com"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="external"
+            >
+              SEE MATCHSTICKED <span className="arr">↗</span>
+            </a>
+          </div>
         </div>
         <div className="bottom">
           <span className="hint">
-            {reduced ? "motion reduced · static signal" : "move cursor to warp the signal"}
+            {reduced || glFailed
+              ? "static signal"
+              : "move cursor to warp the signal"}
           </span>
-          {!reduced && (
+          {!reduced && !glFailed && (
             <button
               className={`toggle${crtOn ? " on" : ""}`}
               onClick={() => setCrtOn((v) => !v)}
