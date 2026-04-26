@@ -988,6 +988,115 @@ body.has-custom-cursor textarea { cursor: text !important; }
   .run-modal { animation: none; }
 }
 
+/* ========== RUN PAGE (standalone) ========== */
+.run-page-back {
+  display: inline-block;
+  margin-bottom: 24px;
+  font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em;
+  color: var(--fg-dim);
+  padding: 8px 12px;
+  border: 1px solid var(--line); border-radius: 3px;
+  transition: border-color .2s, color .2s;
+}
+.run-page-back:hover { border-color: var(--accent); color: var(--accent); }
+
+.run-page {
+  --run-accent: var(--accent);
+  border: 1px solid var(--run-accent);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--panel), var(--bg-2));
+  box-shadow: 0 0 40px color-mix(in srgb, var(--run-accent) 18%, transparent);
+  overflow: hidden;
+}
+.run-page-head { padding: 32px 32px 24px; border-bottom: 1px dashed var(--line); }
+.run-page-head .meta-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em;
+  color: var(--fg-mute);
+  flex-wrap: wrap;
+}
+.run-page-head .meta-row .rank { display: inline-flex; align-items: center; gap: 8px; }
+.run-page-head .meta-row .rank .medal {
+  width: 18px; height: 18px; border-radius: 999px;
+  background: var(--run-accent); color: var(--bg);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--f-px); font-size: 12px;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--run-accent) 55%, transparent);
+}
+.run-page-head .meta-row .rank .medal.silver { background: #c9cfd9; }
+.run-page-head .meta-row .rank .medal.bronze { background: #cd7f32; }
+.run-page-head h1 {
+  font-family: var(--f-px);
+  font-size: clamp(48px, 7vw, 80px);
+  line-height: 0.92;
+  color: var(--fg);
+  margin-top: 14px;
+  text-shadow: 0 0 24px color-mix(in srgb, var(--run-accent) 30%, transparent);
+}
+.run-page-head .tag {
+  font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em;
+  color: var(--run-accent);
+  margin-top: 8px;
+}
+.run-page-head .pitch { margin-top: 16px; color: var(--fg); font-size: 16px; line-height: 1.6; max-width: 60ch; }
+.run-page-head .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.run-page-head .stack .chip {
+  font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em;
+  padding: 4px 8px;
+  border: 1px solid var(--run-accent);
+  border-radius: 3px;
+  color: var(--run-accent);
+  background: color-mix(in srgb, var(--run-accent) 8%, transparent);
+}
+
+.run-page-body { padding: 28px 32px 12px; }
+.run-page-body .section { margin-bottom: 28px; }
+.run-page-body .section h2 {
+  font-family: var(--f-px);
+  font-size: 26px;
+  color: var(--fg);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+.run-page-body .section h2 .bracket { color: var(--run-accent); }
+.run-page-body .section p {
+  font-size: 15px; line-height: 1.7; color: var(--fg);
+  max-width: 64ch;
+  margin-bottom: 12px;
+}
+
+.run-page-foot {
+  padding: 18px 32px;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.25));
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.run-page-foot .cta {
+  font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--fg-dim);
+  background: transparent;
+  cursor: pointer;
+  transition: all .2s;
+  display: inline-flex; align-items: center;
+}
+.run-page-foot .cta:hover { border-color: var(--run-accent); color: var(--run-accent); background: color-mix(in srgb, var(--run-accent) 8%, transparent); }
+.run-page-foot .cta.primary { border-color: var(--run-accent); color: var(--run-accent); }
+.run-page-foot .cta.primary:hover { background: var(--run-accent); color: var(--bg); }
+.run-page-foot .cta.close-inline { margin-left: auto; }
+
+@media (max-width: 600px) {
+  .run-page-head { padding: 24px 20px 18px; }
+  .run-page-head h1 { font-size: 40px; }
+  .run-page-body { padding: 20px 20px 4px; }
+  .run-page-body .section h2 { font-size: 22px; }
+  .run-page-foot { padding: 16px 20px; flex-direction: column; }
+  .run-page-foot .cta { text-align: center; justify-content: center; }
+  .run-page-foot .cta.close-inline { margin-left: 0; }
+}
+
 /* ========== TOAST ========== */
 .toast {
   position: fixed; bottom: 24px; right: 24px; z-index: 60;
