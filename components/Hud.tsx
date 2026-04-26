@@ -6,6 +6,7 @@ import { useSessionTime } from "@/hooks/useSessionTime";
 import { useAchievements } from "@/hooks/useAchievements";
 import { INVENTORY } from "@/content/inventory";
 import { RUNS } from "@/content/runs";
+import { pad2 } from "@/lib/format";
 
 const EQUIPPED = INVENTORY.filter((i) => !i.empty).length;
 
@@ -18,22 +19,20 @@ export function Hud() {
   useEffect(() => {
     const tick = () => {
       const t = new Date();
-      const hh = String(t.getHours()).padStart(2, "0");
-      const mm = String(t.getMinutes()).padStart(2, "0");
-      setClock(`BRISTOL ${hh}:${mm}`);
+      setClock(`BRISTOL ${pad2(t.getHours())}:${pad2(t.getMinutes())}`);
     };
     tick();
     const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
   }, []);
 
-  const playtime = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+  const playtime = `${pad2(h)}:${pad2(m)}`;
 
   return (
     <div className="hud">
       <div className="slot">
         <span className="lbl">LVL</span>
-        <span className="val">{String(age).padStart(2, "0")}</span>
+        <span className="val">{pad2(age)}</span>
       </div>
       <div className="slot">
         <span className="lbl">Play</span>
@@ -41,11 +40,11 @@ export function Hud() {
       </div>
       <div className="slot">
         <span className="lbl">Runs</span>
-        <span className="val" style={{ color: "var(--accent)" }}>{String(RUNS.length).padStart(2, "0")}</span>
+        <span className="val" style={{ color: "var(--accent)" }}>{pad2(RUNS.length)}</span>
       </div>
       <div className="slot">
         <span className="lbl">Tech</span>
-        <span className="val" style={{ color: "var(--xp)" }}>{String(EQUIPPED).padStart(2, "0")}</span>
+        <span className="val" style={{ color: "var(--xp)" }}>{pad2(EQUIPPED)}</span>
       </div>
       <div
         className="slot ach-slot"
@@ -53,7 +52,7 @@ export function Hud() {
       >
         <span className="lbl" aria-hidden="true">★</span>
         <span className="val">
-          {String(unlocked.size).padStart(2, "0")}/{String(total).padStart(2, "0")}
+          {pad2(unlocked.size)}/{pad2(total)}
         </span>
       </div>
       <div className="spacer" />

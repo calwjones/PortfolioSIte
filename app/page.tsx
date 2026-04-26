@@ -17,12 +17,12 @@ import { Arcade } from "@/components/arcade/Arcade";
 import { INVENTORY } from "@/content/inventory";
 import { QUESTS } from "@/content/quests";
 import { RUNS } from "@/content/runs";
+import { pad2 } from "@/lib/format";
 
 const EQUIPPED = INVENTORY.filter((i) => !i.empty).length;
 const LOCKED = INVENTORY.filter((i) => i.empty).length;
 const ACTIVE_QUESTS = QUESTS.filter((q) => !q.done).length;
 const DONE_QUESTS = QUESTS.filter((q) => q.done).length;
-const pad2 = (n: number) => String(n).padStart(2, "0");
 
 export default function Page() {
   return (

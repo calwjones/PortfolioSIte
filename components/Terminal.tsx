@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { RUNS } from "@/content/runs";
 import { useSessionTime } from "@/hooks/useSessionTime";
 import { ACHIEVEMENTS, getUnlocked, unlock } from "@/lib/achievements";
+import { pad2 } from "@/lib/format";
 
 type Line = { kind: "cmd" | "out" | "err"; text: string };
 
@@ -132,12 +133,9 @@ export function Terminal() {
       }
 
       case "stats": {
-        const hh = String(h).padStart(2, "0");
-        const mm = String(m).padStart(2, "0");
-        const ss = String(s).padStart(2, "0");
         const got = getUnlocked().size;
         push([
-          { kind: "out", text: `  session       : ${hh}:${mm}:${ss}` },
+          { kind: "out", text: `  session       : ${pad2(h)}:${pad2(m)}:${pad2(s)}` },
           { kind: "out", text: `  runs          : ${RUNS.length} shipped` },
           { kind: "out", text: `  achievements  : ${got}/${ACHIEVEMENTS.length}` },
           { kind: "out", text: `  zone          : Bristol, UK` },

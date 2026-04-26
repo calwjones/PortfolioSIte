@@ -2,10 +2,11 @@
 
 import { useSessionTime } from "@/hooks/useSessionTime";
 import { RUNS } from "@/content/runs";
+import { pad2 } from "@/lib/format";
 
 export function TitleBlock() {
   const { h, m } = useSessionTime();
-  const playtime = `${String(h).padStart(2, "0")}h ${String(m).padStart(2, "0")}m`;
+  const playtime = `${pad2(h)}h ${pad2(m)}m`;
 
   return (
     <div className="title-block">
@@ -22,7 +23,7 @@ export function TitleBlock() {
         </div>
         <div className="row">
           <span className="lbl">Runs </span>
-          <span className="val">{String(RUNS.length).padStart(2, "0")} shipped</span>
+          <span className="val">{pad2(RUNS.length)} shipped</span>
         </div>
         <div className="row">
           <span className="lbl">Last save </span>
