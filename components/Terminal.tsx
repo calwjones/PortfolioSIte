@@ -23,7 +23,7 @@ const COMMANDS: { usage: string; desc: string }[] = [
 ];
 
 const WELCOME: Line[] = [
-  { kind: "out", text: "CALLUM.SAV — COMMAND LINE v1.0" },
+  { kind: "out", text: "CALLUM.SAV · COMMAND LINE v1.0" },
   { kind: "out", text: "type 'help' for commands, or use the legend on the right." },
   { kind: "out", text: "" },
 ];
@@ -34,7 +34,7 @@ export function Terminal() {
   const [input, setInput] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const outputRef = useRef<HTMLDivElement | null>(null);
-  const { h, m, s } = useSessionTime();
+  const { h, m, s } = useSessionTime({ precise: true });
 
   useEffect(() => {
     const onToggle = () => setOpen((v) => !v);
@@ -168,7 +168,7 @@ export function Terminal() {
 
       case "whoami":
         push([
-          { kind: "out", text: "  callum jones — final-year CS student, UWE Bristol." },
+          { kind: "out", text: "  callum jones, final-year CS student, UWE Bristol." },
           { kind: "out", text: "  open to graduate roles · Bristol / remote." },
         ]);
         break;
