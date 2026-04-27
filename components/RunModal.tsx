@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { RUNS, type Run } from "@/content/runs";
 import { fireToast } from "@/lib/toast";
 import { markRunOpened, unlock } from "@/lib/achievements";
@@ -128,7 +129,7 @@ export function RunModal() {
         </div>
 
         <footer className="run-modal-foot">
-          {run.primary.href && (
+          {run.primary?.href && (
             <a
               className="cta primary"
               href={run.primary.href}
@@ -148,6 +149,14 @@ export function RunModal() {
               {run.source.label}
             </a>
           )}
+          <Link
+            className="cta"
+            href={`/runs/${run.slug}`}
+            onClick={close}
+            scroll={true}
+          >
+            VIEW AS PAGE →
+          </Link>
           <button className="cta close-inline" onClick={close}>
             ‹ RETURN TO SAVE FILE
           </button>

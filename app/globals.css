@@ -977,7 +977,7 @@ body.has-custom-cursor textarea { cursor: text !important; }
 
 @media (max-width: 600px) {
   .run-modal-head { padding: 22px 20px 16px; }
-  .run-modal-head h2 { font-size: 36px; }
+  .run-modal-head h2 { font-size: clamp(28px, 8vw, 36px); }
   .run-modal-body { padding: 16px 20px 4px; }
   .run-modal-body .section h3 { font-size: 20px; }
   .run-modal-foot { padding: 14px 16px; flex-direction: column; }

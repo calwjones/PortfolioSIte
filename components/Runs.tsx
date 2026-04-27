@@ -82,24 +82,22 @@ function RunCard({ r }: { r: Run }) {
         ))}
       </div>
       <div className="actions">
-        <LinkButton href={r.primary.href} primary>{r.primary.label}</LinkButton>
-        <LinkButton href={r.source.href}>{r.source.label}</LinkButton>
+        {r.primary && <LinkButton action={r.primary} primary />}
+        <LinkButton action={r.source} />
       </div>
     </article>
   );
 }
 
 function LinkButton({
-  href,
-  children,
+  action,
   primary,
 }: {
-  href?: string;
-  children: React.ReactNode;
+  action: { label: string; href?: string; scroll?: string };
   primary?: boolean;
 }) {
   const cls = `btn${primary ? " primary" : ""}`;
-  const stop = (e: React.MouseEvent) => e.stopPropagation();
+  const { label, href, scroll } = action;
   if (href) {
     return (
       <a
@@ -107,15 +105,22 @@ function LinkButton({
         href={href}
         target={href.startsWith("http") ? "_blank" : undefined}
         rel={href.startsWith("http") ? "noreferrer" : undefined}
-        onClick={stop}
+        onClick={(e) => e.stopPropagation()}
       >
-        {children}
+        {label}
       </a>
     );
   }
-  return (
-    <button className={cls} onClick={stop}>
-      {children}
-    </button>
-  );
+  if (scroll) {
+    const onClick = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      document.querySelector(scroll)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    return (
+      <button className={cls} onClick={onClick}>
+        {label}
+      </button>
+    );
+  }
+  return null;
 }

@@ -86,7 +86,7 @@ export default function RunPage({ params }: { params: { slug: string } }) {
         </div>
 
         <footer className="run-page-foot">
-          {run.primary.href && (
+          {run.primary?.href && (
             <a
               className="cta primary"
               href={run.primary.href}
