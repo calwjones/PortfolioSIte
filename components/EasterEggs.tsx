@@ -21,6 +21,7 @@ export function EasterEggs() {
   useEffect(() => {
     let kIdx = 0;
     let typeBuf = "";
+    let cheatActive = false;
 
     const onKey = (e: KeyboardEvent) => {
       const expected = KONAMI[kIdx];
@@ -28,9 +29,16 @@ export function EasterEggs() {
         kIdx++;
         if (kIdx === KONAMI.length) {
           kIdx = 0;
-          unlock("cheat-code");
-          document.documentElement.style.setProperty("--accent", "#5fd693");
-          document.documentElement.style.setProperty("--accent-2", "#ffcc3b");
+          if (cheatActive) {
+            document.documentElement.style.removeProperty("--accent");
+            document.documentElement.style.removeProperty("--accent-2");
+            cheatActive = false;
+          } else {
+            unlock("cheat-code");
+            document.documentElement.style.setProperty("--accent", "#5fd693");
+            document.documentElement.style.setProperty("--accent-2", "#ffcc3b");
+            cheatActive = true;
+          }
         }
       } else {
         kIdx = 0;
