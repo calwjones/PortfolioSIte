@@ -86,13 +86,13 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   font-family: var(--f-mono); font-size: 11px; text-transform: uppercase;
   letter-spacing: 0.3em; color: var(--fg-mute); margin-bottom: 10px;
 }
-.title-block h1 {
+.title-block h2 {
   font-family: var(--f-px);
   font-size: 64px; font-weight: 400; line-height: 0.9;
   color: var(--fg);
   letter-spacing: 0.02em;
 }
-.title-block h1 .blink { animation: blink 1s steps(2) infinite; color: var(--accent); }
+.title-block h2 .blink { animation: blink 1s steps(2) infinite; color: var(--accent); }
 .title-block .meta {
   font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em;
   color: var(--fg-dim); text-align: right;
@@ -1137,7 +1137,7 @@ body.has-custom-cursor textarea { cursor: text !important; }
   .quest.active .box::before,
   .hero .top .brand .dot,
   .hero h1.hero-title .u,
-  .title-block h1 .blink { animation: none; }
+  .title-block h2 .blink { animation: none; }
 }
 
 /* ========== HERO (shader CRT) ========== */
@@ -1247,7 +1247,7 @@ body.has-custom-cursor textarea { cursor: text !important; }
     min-height: unset; flex-direction: row; align-items: center; gap: 20px;
   }
   .char-avatar .frame { width: 140px; }
-  .title-block h1 { font-size: 44px; }
+  .title-block h2 { font-size: 44px; }
   .hud { font-size: 10px; padding: 12px 16px; gap: 10px; flex-wrap: wrap; }
   .hud .slot .val { font-size: 16px; }
   .section-head h2 { font-size: 26px; }
@@ -1264,7 +1264,7 @@ body.has-custom-cursor textarea { cursor: text !important; }
   .hero .hero-mid { gap: 10px; }
   .hero .sub { font-size: 11px; letter-spacing: 0.22em; line-height: 1.6; }
   .hero .top .sys { font-size: 9px; letter-spacing: 0.22em; }
-  .title-block h1 { font-size: 36px; }
+  .title-block h2 { font-size: 36px; }
   .title-block .meta { text-align: left; width: 100%; }
   .section-head { margin: 48px 0 16px; }
   .section-head h2 { font-size: 22px; }
