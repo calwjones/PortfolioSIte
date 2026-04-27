@@ -7,6 +7,7 @@ export function Snake() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
   const [score, setScore] = useState(0);
+  const [best, setBest] = useState(0);
   const [overlayHidden, setOverlayHidden] = useState(false);
 
   useEffect(() => {
@@ -32,12 +33,13 @@ export function Snake() {
     let nextDir: [number, number] = [1, 0];
     let food: [number, number] = [0, 0];
     let scoreLocal = 0;
-    let best = 0;
+    let bestLocal = 0;
     try {
-      best = parseInt(localStorage.getItem("snakeBest") || "0", 10) || 0;
+      bestLocal = parseInt(localStorage.getItem("snakeBest") || "0", 10) || 0;
     } catch {
       // private mode / blocked storage — fall back to in-memory
     }
+    setBest(bestLocal);
     let running = false;
     let paused = false;
     let gameOver = false;
@@ -72,7 +74,7 @@ export function Snake() {
       lastTick = 0;
       gameOver = false;
       paused = false;
-      setScore(Math.max(scoreLocal, best));
+      setScore(0);
     };
 
     const drawCell = (x: number, y: number, c: string) => {
@@ -98,11 +100,12 @@ export function Snake() {
         ctx.fillStyle = MID;
         ctx.font = "12px monospace";
         ctx.textAlign = "center";
-        ctx.fillText("GAME OVER", W / 2, H / 2 - 8);
-        ctx.fillText("SCORE " + String(scoreLocal).padStart(4, "0"), W / 2, H / 2 + 10);
+        ctx.fillText("GAME OVER", W / 2, H / 2 - 12);
+        ctx.fillText("SCORE " + String(scoreLocal).padStart(4, "0"), W / 2, H / 2 + 6);
+        ctx.fillText("BEST  " + String(bestLocal).padStart(4, "0"), W / 2, H / 2 + 22);
         ctx.font = "8px monospace";
         ctx.fillStyle = DIM;
-        ctx.fillText("CLICK TO RETRY", W / 2, H / 2 + 28);
+        ctx.fillText("CLICK TO RETRY", W / 2, H / 2 + 40);
       }
       if (paused && !gameOver) {
         ctx.fillStyle = "rgba(4,16,8,0.7)";
@@ -139,16 +142,16 @@ export function Snake() {
           } else {
             snake.pop();
           }
-          setScore(Math.max(scoreLocal, best));
+          setScore(scoreLocal);
         }
-        if (gameOver && scoreLocal > best) {
-          best = scoreLocal;
+        if (gameOver && scoreLocal > bestLocal) {
+          bestLocal = scoreLocal;
+          setBest(bestLocal);
           try {
-            localStorage.setItem("snakeBest", String(best));
+            localStorage.setItem("snakeBest", String(bestLocal));
           } catch {
             // ignore — score just won't persist
           }
-          setScore(best);
         }
       }
       render();
@@ -221,6 +224,7 @@ export function Snake() {
   }, []);
 
   const scoreDisplay = String(score).padStart(4, "0");
+  const bestDisplay = String(best).padStart(4, "0");
 
   return (
     <div className="minigame">
@@ -256,7 +260,10 @@ export function Snake() {
           <span className="k">
             <span className="key">P</span>Pause
           </span>
-          <span className="score">{scoreDisplay}</span>
+          <span className="score">
+            {scoreDisplay}
+            <span className="best"> · BEST {bestDisplay}</span>
+          </span>
         </div>
       </div>
     </div>
