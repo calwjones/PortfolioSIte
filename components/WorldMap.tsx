@@ -27,7 +27,7 @@ export function WorldMap() {
           in your <em>inbox</em>.
         </div>
         <p className="sub">
-          Open to CS graduate roles across the UK — remote or on-site. Based in Bristol;
+          Open to CS graduate roles across the UK, remote or on-site. Based in Bristol,
           happy to relocate for the right role.
         </p>
         <div className="buttons">

@@ -14,13 +14,11 @@ import { TitleBlock } from "@/components/TitleBlock";
 import { Toast } from "@/components/Toast";
 import { WorldMap } from "@/components/WorldMap";
 import { Arcade } from "@/components/arcade/Arcade";
-import { INVENTORY } from "@/content/inventory";
+import { INVENTORY_EQUIPPED, INVENTORY_LOCKED } from "@/content/inventory";
 import { QUESTS } from "@/content/quests";
 import { RUNS } from "@/content/runs";
 import { pad2 } from "@/lib/format";
 
-const EQUIPPED = INVENTORY.filter((i) => !i.empty).length;
-const LOCKED = INVENTORY.filter((i) => i.empty).length;
 const ACTIVE_QUESTS = QUESTS.filter((q) => !q.done).length;
 const DONE_QUESTS = QUESTS.filter((q) => q.done).length;
 
@@ -34,14 +32,14 @@ export default function Page() {
         <CharacterCard />
         <SectionHead
           title="COMPLETED RUNS"
-          right={`${pad2(RUNS.length)} / ${pad2(RUNS.length)} · Hover for glow · Click to inspect`}
+          right={`${pad2(RUNS.length)} / ${pad2(RUNS.length)} · Click to inspect`}
         />
         <Runs />
-        <SectionHead title="ARCADE · PLAYABLE" right="Click screen to start · Arrow keys" />
+        <SectionHead title="ARCADE · PLAYABLE" right="Tap or click to start · Arrow keys" />
         <Arcade />
         <SectionHead
           title="INVENTORY · TECH"
-          right={`Hover for name · ${pad2(EQUIPPED)} equipped · ${pad2(LOCKED)} locked`}
+          right={`${pad2(INVENTORY_EQUIPPED)} equipped · ${pad2(INVENTORY_LOCKED)} locked`}
         />
         <Inventory />
         <SectionHead

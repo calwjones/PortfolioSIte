@@ -21,7 +21,6 @@ export const ACHIEVEMENTS: Achievement[] = [
 
 const KEY = "sav:achievements";
 const RUNS_OPENED_KEY = "sav:runs-opened";
-const TOTAL = ACHIEVEMENTS.length;
 
 function readSet(key: string): Set<string> {
   if (typeof window === "undefined") return new Set();
@@ -47,14 +46,6 @@ export function getUnlocked(): Set<string> {
   return readSet(KEY);
 }
 
-export function getUnlockedCount(): number {
-  return getUnlocked().size;
-}
-
-export function getTotal(): number {
-  return TOTAL;
-}
-
 export function unlock(id: string) {
   if (typeof window === "undefined") return;
   const ach = ACHIEVEMENTS.find((a) => a.id === id);
@@ -73,8 +64,4 @@ export function markRunOpened(slug: string) {
   set.add(slug);
   writeSet(RUNS_OPENED_KEY, set);
   return set;
-}
-
-export function getRunsOpened(): Set<string> {
-  return readSet(RUNS_OPENED_KEY);
 }

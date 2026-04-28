@@ -4,11 +4,9 @@ import { useEffect, useState } from "react";
 import { useAge } from "@/hooks/useAge";
 import { useSessionTime } from "@/hooks/useSessionTime";
 import { useAchievements } from "@/hooks/useAchievements";
-import { INVENTORY } from "@/content/inventory";
+import { INVENTORY_EQUIPPED } from "@/content/inventory";
 import { RUNS } from "@/content/runs";
 import { pad2 } from "@/lib/format";
-
-const EQUIPPED = INVENTORY.filter((i) => !i.empty).length;
 
 export function Hud() {
   const [clock, setClock] = useState("BRISTOL");
@@ -44,7 +42,7 @@ export function Hud() {
       </div>
       <div className="slot">
         <span className="lbl">Tech</span>
-        <span className="val" style={{ color: "var(--xp)" }}>{pad2(EQUIPPED)}</span>
+        <span className="val" style={{ color: "var(--xp)" }}>{pad2(INVENTORY_EQUIPPED)}</span>
       </div>
       <div
         className="slot ach-slot"

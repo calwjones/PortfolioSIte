@@ -32,3 +32,6 @@ export const INVENTORY: InvItem[] = [
   { g: "?", name: "Empty slot", empty: true },
   { g: "?", name: "Empty slot", empty: true },
 ];
+
+export const INVENTORY_EQUIPPED = INVENTORY.filter((i) => !i.empty).length;
+export const INVENTORY_LOCKED = INVENTORY.filter((i) => i.empty).length;
