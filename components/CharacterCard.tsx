@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useAge } from "@/hooks/useAge";
 import { MAX_YEARS, SKILLS } from "@/content/skills";
-import { PixelAvatar } from "./PixelAvatar";
 
 export function CharacterCard() {
   const age = useAge();
@@ -12,7 +12,15 @@ export function CharacterCard() {
         <div>
           <div className="frame">
             <span className="corner">LV {age}</span>
-            <PixelAvatar />
+            <Image
+              className="photo"
+              src="/avatar.jpg"
+              alt="Callum Jones"
+              width={800}
+              height={600}
+              sizes="(max-width: 760px) 100vw, 280px"
+              priority
+            />
           </div>
           <div className="handle">
             callum<span className="at">.jones</span>
@@ -22,9 +30,9 @@ export function CharacterCard() {
       </div>
       <div className="char-stats">
         <p className="quote">
-          Final-year CS student at <em>UWE Bristol</em>. Just shipped <em>GameEngine</em> —
-          my final-year project and dissertation. Modules finish May 2026, graduating July
-          — open to CS graduate roles across the UK, remote or on-site.
+          Final-year CS student at <em>UWE Bristol</em>. Just shipped <em>GameEngine</em>,
+          my dissertation project. Modules finish May 2026, graduating July. Open to CS
+          graduate roles across the UK, remote or on-site.
         </p>
         <div className="stat-grid">
           {SKILLS.map((s) => (
