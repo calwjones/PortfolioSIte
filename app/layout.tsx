@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { VT323, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const px = VT323({
@@ -12,14 +13,14 @@ const px = VT323({
 const sans = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  weight: ["400", "500", "700"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -119,6 +120,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   );
