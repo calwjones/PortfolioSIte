@@ -158,7 +158,7 @@ export function RunModal() {
             VIEW AS PAGE →
           </Link>
           <button className="cta close-inline" onClick={close}>
-            ‹ RETURN TO SAVE FILE
+            ‹ BACK TO PORTFOLIO
           </button>
         </footer>
       </div>

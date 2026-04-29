@@ -27,13 +27,13 @@ const mono = JetBrains_Mono({
 const SITE_URL = "https://calwjones.com";
 const TITLE = "Callum Jones — Portfolio";
 const DESC =
-  "Callum Jones — final-year CS student at UWE Bristol. Portfolio as an RPG save file.";
+  "Callum Jones — final-year Computer Science student at UWE Bristol. Selected projects, case studies, and contact.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: TITLE, template: "%s · Callum Jones" },
   description: DESC,
-  applicationName: "callum.sav",
+  applicationName: "Callum Jones Portfolio",
   authors: [{ name: "Callum Jones" }],
   keywords: [
     "Callum Jones",

@@ -40,7 +40,7 @@ export default function RunPage({ params }: { params: { slug: string } }) {
   return (
     <div className="wrap">
       <Link href="/" className="run-page-back" data-cursor="external">
-        ‹ RETURN TO SAVE FILE
+        ‹ BACK TO PORTFOLIO
       </Link>
 
       <article
@@ -107,7 +107,7 @@ export default function RunPage({ params }: { params: { slug: string } }) {
             </a>
           )}
           <Link href="/" className="cta close-inline">
-            ‹ RETURN TO SAVE FILE
+            ‹ BACK TO PORTFOLIO
           </Link>
         </footer>
       </article>

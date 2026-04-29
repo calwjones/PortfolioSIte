@@ -279,7 +279,7 @@ export function Hero() {
         <div className="top">
           <div className="brand">
             <span className="dot" />
-            CALLUM.SAV
+            CALLUM JONES — PORTFOLIO
           </div>
           <div className="sys">
             SIGNAL PAL · 50HZ<br />
