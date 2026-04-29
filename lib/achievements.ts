@@ -7,7 +7,7 @@ export type Achievement = {
 };
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: "first-visit",    name: "First Visit",       hint: "boot the save file" },
+  { id: "first-visit",    name: "First Visit",       hint: "open the site" },
   { id: "scroll-further", name: "Scroll Further",    hint: "reach the footer" },
   { id: "quest-giver",    name: "Quest Giver",       hint: "find the contact zone" },
   { id: "log-opened",     name: "Log Entry Opened",  hint: "open any run" },

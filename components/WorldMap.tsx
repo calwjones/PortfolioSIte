@@ -23,8 +23,7 @@ export function WorldMap() {
     <div className="worldmap">
       <div>
         <div className="callout">
-          Respawn<br />
-          in your <em>inbox</em>.
+          Get in <em>touch</em>.
         </div>
         <p className="sub">
           Open to CS graduate roles across the UK, remote or on-site. Based in Bristol,
@@ -191,7 +190,7 @@ export function WorldMap() {
             fontSize="8"
             letterSpacing="2"
           >
-            ZONE: UK · OPEN TO ROLES
+            BASED IN UK · OPEN TO ROLES
           </text>
         </svg>
       </div>
