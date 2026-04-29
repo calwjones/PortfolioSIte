@@ -3,23 +3,34 @@
 import { useEffect, useRef } from "react";
 import { RUNS, type Run } from "@/content/runs";
 
+const HERO_SLUG = "gameengine";
+
 export function Runs() {
+  const hero = RUNS.find((r) => r.slug === HERO_SLUG);
+  const rest = RUNS.filter((r) => r.slug !== HERO_SLUG);
   return (
-    <div className="runs">
-      {RUNS.map((r) => (
-        <RunCard key={r.name} r={r} />
-      ))}
-    </div>
+    <>
+      {hero && <HeroRun r={hero} />}
+      <div className="runs-list">
+        {rest.map((r) => (
+          <RunRow key={r.slug} r={r} />
+        ))}
+      </div>
+    </>
   );
 }
 
-function RunCard({ r }: { r: Run }) {
-  const ref = useRef<HTMLElement | null>(null);
+function openRun(slug: string) {
+  history.pushState(null, "", `#run=${slug}`);
+  window.dispatchEvent(new HashChangeEvent("hashchange"));
+}
 
+function useGlow<T extends HTMLElement>(glow: string) {
+  const ref = useRef<T | null>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    el.style.setProperty("--glow", r.dataGlow);
+    el.style.setProperty("--glow", glow);
     const onMove = (e: PointerEvent) => {
       const rect = el.getBoundingClientRect();
       el.style.setProperty("--mx", `${((e.clientX - rect.left) / rect.width) * 100}%`);
@@ -27,100 +38,96 @@ function RunCard({ r }: { r: Run }) {
     };
     el.addEventListener("pointermove", onMove);
     return () => el.removeEventListener("pointermove", onMove);
-  }, [r.dataGlow]);
+  }, [glow]);
+  return ref;
+}
 
-  const onClick = () => {
-    history.pushState(null, "", `#run=${r.slug}`);
-    window.dispatchEvent(new HashChangeEvent("hashchange"));
-  };
+function onCardKey(e: React.KeyboardEvent, slug: string) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    openRun(slug);
+  }
+}
 
-  const onKey = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      onClick();
-    }
-  };
-
+function HeroRun({ r }: { r: Run }) {
+  const ref = useGlow<HTMLElement>(r.dataGlow);
+  const ctaLabel =
+    r.primary?.scroll || r.primary?.label?.toLowerCase().includes("play")
+      ? "Play demo"
+      : "Read case study";
   return (
     <article
       ref={ref}
-      className="run"
-      onClick={onClick}
-      onKeyDown={onKey}
+      className="hero-run"
+      onClick={() => openRun(r.slug)}
+      onKeyDown={(e) => onCardKey(e, r.slug)}
       role="button"
       tabIndex={0}
       aria-label={`Open log entry for ${r.name}`}
       data-cursor="inspect"
-      data-glow={r.dataGlow}
     >
-      <div className="top">
-        <span className="rank">
-          <span className={`medal${r.medalClass ? " " + r.medalClass : ""}`}>{r.medal}</span>
-          {r.rankLabel}
-        </span>
-        <span>{r.meta}</span>
+      <div className="hero-run-media" aria-label={`${r.name} screenshot placeholder`}>
+        <span className="ph-label">[ {r.name.toUpperCase()} — SCREENSHOT PLACEHOLDER ]</span>
       </div>
-      <div className="name">
-        <h3>{r.name}</h3>
-        <span className="tag">{r.tag}</span>
-      </div>
-      <p className="desc">{r.desc}</p>
-      <div className="stats">
-        <span className={`s ${r.diffClass}`}>
-          DIFFICULTY<span className="v">{r.diffStars}</span>
-        </span>
-        <span className="s">
-          HOURS<span className="v accent">{r.hours}</span>
-        </span>
-        <span className="s">
-          {r.stat3Label}<span className="v">{r.stat3Value}</span>
-        </span>
-      </div>
-      <div className="achievements">
-        {r.achievements.map((a, i) => (
-          <span key={i} className={`ach${a.locked ? " locked" : ""}`}>{a.label}</span>
-        ))}
-      </div>
-      <div className="actions">
-        {r.primary && <LinkButton action={r.primary} primary />}
-        <LinkButton action={r.source} />
+      <div className="hero-run-meta">
+        <div className="hero-run-top">
+          <span className="rank-line">
+            <span className={`medal${r.medalClass ? " " + r.medalClass : ""}`}>
+              {r.medal}
+            </span>
+            FEATURED · {r.tag}
+          </span>
+          <span className="tech-line">{r.meta}</span>
+        </div>
+        <h3 className="hero-run-title">{r.name}</h3>
+        <p className="hero-run-desc">{r.desc}</p>
+        <div className="hero-run-row">
+          <span className="cta-link">
+            {ctaLabel} <span className="arr">→</span>
+          </span>
+          <span className="hero-run-stats">
+            {r.diffStars} · {r.hours} hrs · {r.stat3Label} {r.stat3Value}
+          </span>
+        </div>
       </div>
     </article>
   );
 }
 
-function LinkButton({
-  action,
-  primary,
-}: {
-  action: { label: string; href?: string; scroll?: string };
-  primary?: boolean;
-}) {
-  const cls = `btn${primary ? " primary" : ""}`;
-  const { label, href, scroll } = action;
-  if (href) {
-    return (
-      <a
-        className={cls}
-        href={href}
-        target={href.startsWith("http") ? "_blank" : undefined}
-        rel={href.startsWith("http") ? "noreferrer" : undefined}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {label}
-      </a>
-    );
-  }
-  if (scroll) {
-    const onClick = (e: React.MouseEvent) => {
-      e.stopPropagation();
-      document.querySelector(scroll)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-    return (
-      <button className={cls} onClick={onClick}>
-        {label}
-      </button>
-    );
-  }
-  return null;
+function RunRow({ r }: { r: Run }) {
+  const ref = useGlow<HTMLElement>(r.dataGlow);
+  const isPlay = !!r.primary?.scroll;
+  return (
+    <article
+      ref={ref}
+      className="run-row"
+      onClick={() => openRun(r.slug)}
+      onKeyDown={(e) => onCardKey(e, r.slug)}
+      role="button"
+      tabIndex={0}
+      aria-label={`Open log entry for ${r.name}`}
+      data-cursor="inspect"
+    >
+      <div className="run-row-img" aria-label={`${r.name} screenshot placeholder`}>
+        <span className="ph-label">[ {r.name.toUpperCase()} — SCREENSHOT ]</span>
+      </div>
+      <div className="run-row-meta">
+        <div className="run-row-top">
+          <span className="rank-line">
+            <span className={`medal${r.medalClass ? " " + r.medalClass : ""}`}>
+              {r.medal}
+            </span>
+            {r.rankLabel}
+          </span>
+          <span className="tech-line">{r.meta}</span>
+        </div>
+        <h4 className="run-row-title">{r.name}</h4>
+        <p className="run-row-desc">{r.desc}</p>
+        <span className="cta-link small">
+          {isPlay ? "Play demo" : "Case study"}{" "}
+          <span className="arr">{isPlay ? "↓" : "→"}</span>
+        </span>
+      </div>
+    </article>
+  );
 }

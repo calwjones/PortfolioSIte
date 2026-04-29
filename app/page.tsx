@@ -1,8 +1,8 @@
-import { CharacterCard } from "@/components/CharacterCard";
 import { EasterEggs } from "@/components/EasterEggs";
 import { Hero } from "@/components/Hero";
 import { Hud } from "@/components/Hud";
-import { Inventory } from "@/components/Inventory";
+import { Intro } from "@/components/Intro";
+import { NowStrip } from "@/components/NowStrip";
 import { QuestLog } from "@/components/QuestLog";
 import { RunModal } from "@/components/RunModal";
 import { Runs } from "@/components/Runs";
@@ -10,11 +10,9 @@ import { SectionHead } from "@/components/SectionHead";
 import { Terminal } from "@/components/Terminal";
 import { AchievementWatchers } from "@/components/AchievementWatchers";
 import { CustomCursor } from "@/components/CustomCursor";
-import { TitleBlock } from "@/components/TitleBlock";
 import { Toast } from "@/components/Toast";
 import { WorldMap } from "@/components/WorldMap";
 import { Arcade } from "@/components/arcade/Arcade";
-import { INVENTORY_EQUIPPED, INVENTORY_LOCKED } from "@/content/inventory";
 import { QUESTS } from "@/content/quests";
 import { RUNS } from "@/content/runs";
 import { pad2 } from "@/lib/format";
@@ -28,30 +26,25 @@ export default function Page() {
       <Hero />
       <Hud />
       <div className="wrap">
-        <TitleBlock />
-        <CharacterCard />
+        <Intro />
         <SectionHead
-          title="COMPLETED RUNS"
-          right={`${pad2(RUNS.length)} / ${pad2(RUNS.length)} · Click to inspect`}
+          title="SELECTED WORK"
+          right={`${pad2(RUNS.length)} projects · click any card for the full case study`}
         />
         <Runs />
-        <SectionHead title="ARCADE · PLAYABLE" right="Tap or click to start · Arrow keys" />
+        <NowStrip />
+        <SectionHead title="PLAYABLE DEMOS" right="Tap or click to start · Arrow keys" />
         <Arcade />
         <SectionHead
-          title="INVENTORY · TECH"
-          right={`${pad2(INVENTORY_EQUIPPED)} equipped · ${pad2(INVENTORY_LOCKED)} locked`}
-        />
-        <Inventory />
-        <SectionHead
-          title="QUEST LOG · NOW"
-          right={`${pad2(ACTIVE_QUESTS)} active · ${pad2(DONE_QUESTS)} completed`}
+          title="WORKING ON"
+          right={`${pad2(ACTIVE_QUESTS)} active · ${pad2(DONE_QUESTS)} done`}
         />
         <QuestLog />
-        <SectionHead title="WORLD MAP · CONTACT" right="Teleport → message" />
+        <SectionHead title="CONTACT" right="Email · LinkedIn · GitHub · CV" />
         <WorldMap />
         <footer className="savefooter">
-          <span>© 2026 Callum Jones · SAVE FILE 001</span>
-          <span>Built with Next.js · shaders in WebGL · sand physics from my Tetris repo</span>
+          <span>© 2026 Callum Jones</span>
+          <span>Built with Next.js · WebGL shaders · sand physics from my Tetris repo</span>
         </footer>
       </div>
       <Toast />
