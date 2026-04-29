@@ -9,8 +9,17 @@ export function Hero() {
   const [sysTime, setSysTime] = useState("—:—:—");
   const [crtOn, setCrtOn] = useState(true);
   const [glFailed, setGlFailed] = useState(false);
+  const [coarse, setCoarse] = useState(false);
   const crtRef = useRef(1);
   const reduced = usePrefersReducedMotion();
+
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    const update = () => setCoarse(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     crtRef.current = crtOn ? 1 : 0;
@@ -185,8 +194,19 @@ export function Hero() {
     const onLeave = () => {
       mouseAmt = 0;
     };
+    // touch: warp on tap (pointerdown) and during drag (pointermove fires while finger is down).
+    // page still scrolls — warp follows finger as it moves through viewport coords, then fades.
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType === "touch") onMove(e);
+    };
+    const onUp = (e: PointerEvent) => {
+      if (e.pointerType === "touch") mouseAmt = 0;
+    };
     section.addEventListener("pointermove", onMove);
     section.addEventListener("pointerleave", onLeave);
+    section.addEventListener("pointerdown", onDown);
+    section.addEventListener("pointerup", onUp);
+    section.addEventListener("pointercancel", onUp);
 
     const t0 = performance.now();
     const frame = () => {
@@ -240,6 +260,9 @@ export function Hero() {
       window.removeEventListener("resize", resize);
       section.removeEventListener("pointermove", onMove);
       section.removeEventListener("pointerleave", onLeave);
+      section.removeEventListener("pointerdown", onDown);
+      section.removeEventListener("pointerup", onUp);
+      section.removeEventListener("pointercancel", onUp);
       document.removeEventListener("visibilitychange", onVis);
       io.disconnect();
     };
@@ -256,7 +279,7 @@ export function Hero() {
         <div className="top">
           <div className="brand">
             <span className="dot" />
-            CALLUM.SAV / v3
+            CALLUM.SAV
           </div>
           <div className="sys">
             SIGNAL PAL · 50HZ<br />
@@ -298,7 +321,9 @@ export function Hero() {
           <span className="hint">
             {reduced || glFailed
               ? "static signal"
-              : "move cursor to warp the signal"}
+              : coarse
+                ? "tap or drag to warp the signal"
+                : "move cursor to warp the signal"}
           </span>
           {!reduced && !glFailed && (
             <button
