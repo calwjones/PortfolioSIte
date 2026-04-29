@@ -42,7 +42,7 @@ export default async function OGImage() {
               boxShadow: "0 0 10px #ff5b1f",
             }}
           />
-          <span>CALLUM.SAV / v3</span>
+          <span>CALLUM.SAV</span>
         </div>
         <div
           style={{
