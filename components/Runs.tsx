@@ -75,12 +75,7 @@ function HeroRun({ r }: { r: Run }) {
       </div>
       <div className="hero-run-meta">
         <div className="hero-run-top">
-          <span className="rank-line">
-            <span className={`medal${r.medalClass ? " " + r.medalClass : ""}`}>
-              {r.medal}
-            </span>
-            FEATURED · {r.tag}
-          </span>
+          <span className="rank-line">FEATURED · {r.tag}</span>
           <span className="tech-line">{r.meta}</span>
         </div>
         <h3 className="hero-run-title">{r.name}</h3>
@@ -120,12 +115,7 @@ function RunRow({ r }: { r: Run }) {
       </div>
       <div className="run-row-meta">
         <div className="run-row-top">
-          <span className="rank-line">
-            <span className={`medal${r.medalClass ? " " + r.medalClass : ""}`}>
-              {r.medal}
-            </span>
-            {r.rankLabel}
-          </span>
+          <span className="rank-line">{r.rankLabel}</span>
           <span className="tech-line">{r.meta}</span>
         </div>
         <h4 className="run-row-title">{r.name}</h4>

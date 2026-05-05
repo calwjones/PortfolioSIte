@@ -43,6 +43,47 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 @keyframes blink { 50% { opacity: 0; } }
 
+/* ========== STATUSBAR (slim, sticky) ========== */
+.statusbar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 24px;
+  padding: 10px 24px;
+  background: rgba(10,13,20,0.85);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--fg-mute);
+}
+.statusbar .status-dot {
+  width: 6px; height: 6px; border-radius: 999px;
+  background: var(--health);
+  box-shadow: 0 0 8px var(--health);
+  animation: pulse 1.8s ease-in-out infinite;
+  display: inline-block; margin-right: 8px; vertical-align: middle;
+}
+.statusbar .progress {
+  flex: 1;
+  height: 1px; background: var(--line); position: relative;
+  max-width: 240px;
+}
+.statusbar .progress > i {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--accent); width: 0%;
+  transition: width .15s linear;
+}
+.statusbar .nav { display: flex; gap: 18px; margin-left: auto; }
+.statusbar .nav a { color: var(--fg-mute); transition: color .2s; }
+.statusbar .nav a:hover, .statusbar .nav a:focus-visible { color: var(--accent); outline: none; }
+.statusbar .nav a.current { color: var(--fg); }
+@media (max-width: 720px) { .statusbar .progress { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .statusbar .status-dot { animation: none; }
+}
+
 /* ========== HUD ========== */
 .hud {
   position: sticky; top: 0; z-index: 50;

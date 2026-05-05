@@ -3,8 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { RUNS, type Run } from "@/content/runs";
-import { fireToast } from "@/lib/toast";
-import { markRunOpened, unlock } from "@/lib/achievements";
 
 function slugFromHash(hash: string): string | null {
   const match = /#run=([a-z0-9-]+)/i.exec(hash);
@@ -29,15 +27,7 @@ export function RunModal() {
         return;
       }
       const match = RUNS.find((r) => r.slug === slug);
-      if (match) {
-        setRun(match);
-        fireToast(match.achievement);
-        unlock("log-opened");
-        const opened = markRunOpened(match.slug);
-        if (opened && opened.size >= RUNS.length) unlock("completionist");
-      } else {
-        setRun(null);
-      }
+      setRun(match ?? null);
     };
     sync();
     window.addEventListener("hashchange", sync);
