@@ -783,15 +783,37 @@ body.has-custom-cursor textarea { cursor: text !important; }
 .run-modal {
   --run-accent: var(--accent);
   position: relative;
-  width: 100%; max-width: 760px;
+  width: 100%; max-width: 1080px;
   max-height: calc(100vh - 64px);
   background: linear-gradient(180deg, var(--panel), var(--bg-2));
   border: 1px solid var(--run-accent);
   border-radius: 8px;
   box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04), 0 0 40px color-mix(in srgb, var(--run-accent) 35%, transparent);
-  display: grid; grid-template-rows: auto 1fr auto;
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  grid-template-rows: 1fr;
   overflow: hidden;
   animation: modalIn .28s cubic-bezier(0.16,1,0.3,1);
+}
+.run-modal-cover {
+  position: relative;
+  background: linear-gradient(135deg, #1a2238, #0e1423);
+  border-right: 1px solid var(--line);
+  overflow: hidden;
+  min-height: 0;
+}
+.run-modal-cover::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--run-accent) 14%, transparent), transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+}
+.run-modal-content {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  overflow: hidden;
 }
 @keyframes modalIn {
   from { transform: translateY(12px) scale(0.98); opacity: 0; }
@@ -896,18 +918,25 @@ body.has-custom-cursor textarea { cursor: text !important; }
 .run-modal-foot .cta.primary:hover { background: var(--run-accent); color: var(--bg); }
 .run-modal-foot .cta.close-inline { margin-left: auto; }
 
-@media (max-width: 600px) {
-  /* Single scrollable column on mobile — head + body + foot all scroll
-     together inside the modal so the case-study text isn't crammed into
-     a sliver between fixed head/foot. */
+@media (max-width: 720px) {
+  /* Stack the modal on mobile: cover image at the top, then the whole
+     content column (head + body + foot) scrolls together so the case
+     study text isn't crammed into a sliver. */
   .run-modal {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
+  .run-modal-cover {
+    width: 100%;
+    height: 220px;
+    flex-shrink: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .run-modal-content { display: contents; }
   .run-modal-body { overflow: visible; }
-  /* Close button stays pinned in the viewport corner so it's always reachable */
   .run-modal-close { position: fixed; top: 16px; right: 20px; }
 
   .run-modal-head { padding: 22px 20px 16px; }
@@ -943,6 +972,27 @@ body.has-custom-cursor textarea { cursor: text !important; }
   background: linear-gradient(180deg, var(--panel), var(--bg-2));
   box-shadow: 0 0 40px color-mix(in srgb, var(--run-accent) 18%, transparent);
   overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+}
+.run-page-cover {
+  position: relative;
+  background: linear-gradient(135deg, #1a2238, #0e1423);
+  border-right: 1px solid var(--line);
+  overflow: hidden;
+  min-height: 100%;
+}
+.run-page-cover::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--run-accent) 14%, transparent), transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+}
+.run-page-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 .run-page-head { padding: 32px 32px 24px; border-bottom: 1px dashed var(--line); }
 .run-page-head .meta-row {
@@ -1013,7 +1063,16 @@ body.has-custom-cursor textarea { cursor: text !important; }
 .run-page-foot .cta.primary:hover { background: var(--run-accent); color: var(--bg); }
 .run-page-foot .cta.close-inline { margin-left: auto; }
 
-@media (max-width: 600px) {
+@media (max-width: 720px) {
+  .run-page {
+    grid-template-columns: 1fr;
+  }
+  .run-page-cover {
+    height: 240px;
+    min-height: 240px;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
   .run-page-head { padding: 24px 20px 18px; }
   .run-page-head h1 { font-size: 40px; }
   .run-page-body { padding: 20px 20px 4px; }
