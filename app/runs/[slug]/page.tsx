@@ -45,15 +45,17 @@ export default function RunPage({ params }: { params: { slug: string } }) {
       </Link>
 
       <article
-        className="run-page"
+        className={`run-page${run.wideModal ? " wide" : ""}`}
         style={{ ["--run-accent" as string]: accent } as React.CSSProperties}
       >
         <div className="run-page-cover" aria-hidden="true">
           <Image
-            src={`/projects/${run.slug}-cs.png`}
+            src={`/projects/${run.slug}${run.wideModal ? "" : "-cs"}.png`}
             alt=""
             fill
-            sizes="(max-width: 720px) 100vw, 420px"
+            sizes={run.wideModal
+              ? "(max-width: 720px) 100vw, 1280px"
+              : "(max-width: 720px) 100vw, 420px"}
             style={{ objectFit: "contain", objectPosition: "center" }}
             priority
           />

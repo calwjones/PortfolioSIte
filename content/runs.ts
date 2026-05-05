@@ -33,6 +33,8 @@ export type Run = {
   source: RunAction;
   caseStudy?: CaseStudy;
   mapPin?: { x: number; y: number; label?: string; anchor?: "start" | "end" };
+  /** Use a wider modal/page with the screenshot at the top (for projects with landscape UIs that don't fit a side column). */
+  wideModal?: boolean;
 };
 
 const MATCHSTICKED_CASE_STUDY: CaseStudy = {
@@ -228,6 +230,7 @@ export const RUNS: Run[] = [
     primary: { label: "⤓ DISSERTATION", href: "/GameEngine_Dissertation.pdf" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/GameEngine" },
     mapPin: { x: 340, y: 170, anchor: "end" },
+    wideModal: true,
     caseStudy: {
       pitch:
         "Final-year dissertation. A 2D platformer engine and visual level editor in C++17. Three layers (Game, Engine, Editor) with strictly downward dependencies, so the engine has no idea the editor exists. SFML for windowing, Dear ImGui for the editor, RapidJSON for level files. Cross-platform CMake build for macOS and Windows.",

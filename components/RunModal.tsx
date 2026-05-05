@@ -68,7 +68,7 @@ export function RunModal() {
       aria-labelledby="run-modal-title"
     >
       <div
-        className="run-modal"
+        className={`run-modal${run.wideModal ? " wide" : ""}`}
         style={{ ["--run-accent" as string]: accentColor } as React.CSSProperties}
         onClick={(e) => e.stopPropagation()}
       >
@@ -84,10 +84,12 @@ export function RunModal() {
 
         <div className="run-modal-cover" aria-hidden="true">
           <Image
-            src={`/projects/${run.slug}-cs.png`}
+            src={`/projects/${run.slug}${run.wideModal ? "" : "-cs"}.png`}
             alt=""
             fill
-            sizes="(max-width: 720px) 100vw, 380px"
+            sizes={run.wideModal
+              ? "(max-width: 720px) 100vw, 1280px"
+              : "(max-width: 720px) 100vw, 380px"}
             style={{ objectFit: "contain", objectPosition: "center" }}
             priority
           />
