@@ -84,11 +84,11 @@ export function RunModal() {
 
         <div className="run-modal-cover" aria-hidden="true">
           <Image
-            src={`/projects/${run.slug}${run.wideModal ? "" : "-cs"}.png`}
+            src={`/projects/${run.slug}-cs.png`}
             alt=""
             fill
             sizes={run.wideModal
-              ? "(max-width: 720px) 100vw, 1280px"
+              ? "(max-width: 720px) 100vw, 480px"
               : "(max-width: 720px) 100vw, 380px"}
             style={{ objectFit: "contain", objectPosition: "center" }}
             priority
