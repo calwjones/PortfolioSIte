@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Callum Jones — Portfolio";
+export const alt = "Callum Jones · Portfolio";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -42,7 +42,7 @@ export default async function OGImage() {
               boxShadow: "0 0 10px #ff5b1f",
             }}
           />
-          <span>CALLUM JONES — PORTFOLIO</span>
+          <span>CALLUM JONES · PORTFOLIO</span>
         </div>
         <div
           style={{

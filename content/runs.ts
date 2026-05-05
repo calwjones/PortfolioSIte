@@ -315,7 +315,7 @@ export const RUNS: Run[] = [
     meta: "2024 · PYTHON · TKINTER",
     name: "Calculator",
     tag: "DESKTOP APP",
-    desc: "Desktop calculator with simple and scientific modes, full keyboard control, expression history. Hand-written shunting-yard parser into RPN — parses arithmetic safely instead of passing input to an interpreter.",
+    desc: "Desktop calculator with simple and scientific modes, full keyboard control, expression history. Hand-written shunting-yard parser into RPN, so user input is parsed directly rather than passed to an interpreter.",
     diffClass: "diff-easy",
     diffStars: "★★☆☆☆",
     hours: "10",

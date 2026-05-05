@@ -897,6 +897,19 @@ body.has-custom-cursor textarea { cursor: text !important; }
 .run-modal-foot .cta.close-inline { margin-left: auto; }
 
 @media (max-width: 600px) {
+  /* Single scrollable column on mobile — head + body + foot all scroll
+     together inside the modal so the case-study text isn't crammed into
+     a sliver between fixed head/foot. */
+  .run-modal {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .run-modal-body { overflow: visible; }
+  /* Close button stays pinned in the viewport corner so it's always reachable */
+  .run-modal-close { position: fixed; top: 16px; right: 20px; }
+
   .run-modal-head { padding: 22px 20px 16px; }
   .run-modal-head h2 { font-size: clamp(28px, 8vw, 36px); }
   .run-modal-body { padding: 16px 20px 4px; }

@@ -25,9 +25,9 @@ const mono = JetBrains_Mono({
 });
 
 const SITE_URL = "https://calwjones.com";
-const TITLE = "Callum Jones — Portfolio";
+const TITLE = "Callum Jones · Portfolio";
 const DESC =
-  "Callum Jones — final-year Computer Science student at UWE Bristol. Selected projects, case studies, and contact.";
+  "Callum Jones, final-year Computer Science student at UWE Bristol. Selected projects, case studies, and contact.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

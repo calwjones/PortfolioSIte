@@ -23,7 +23,7 @@ const COMMANDS: { usage: string; desc: string }[] = [
 ];
 
 const WELCOME: Line[] = [
-  { kind: "out", text: "CALLUM JONES — COMMAND LINE v1.0" },
+  { kind: "out", text: "CALLUM JONES · COMMAND LINE v1.0" },
   { kind: "out", text: "type 'help' for commands, or use the legend on the right." },
   { kind: "out", text: "" },
 ];
