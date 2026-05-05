@@ -67,28 +67,31 @@ export function RunModal() {
       aria-modal="true"
       aria-labelledby="run-modal-title"
     >
+      <button
+        ref={closeBtnRef}
+        className="run-modal-close"
+        onClick={(e) => {
+          e.stopPropagation();
+          close();
+        }}
+        aria-label="Close log entry"
+        data-cursor="close"
+      >
+        ×
+      </button>
+
       <div
         className={`run-modal${run.wideModal ? " wide" : ""}`}
         style={{ ["--run-accent" as string]: accentColor } as React.CSSProperties}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          ref={closeBtnRef}
-          className="run-modal-close"
-          onClick={close}
-          aria-label="Close log entry"
-          data-cursor="close"
-        >
-          ×
-        </button>
-
         <div className="run-modal-cover" aria-hidden="true">
           <Image
-            src={`/projects/${run.slug}-cs.png`}
+            src={`/projects/${run.slug}${run.wideModal ? "" : "-cs"}.png`}
             alt=""
             fill
             sizes={run.wideModal
-              ? "(max-width: 720px) 100vw, 480px"
+              ? "(max-width: 720px) 100vw, 600px"
               : "(max-width: 720px) 100vw, 380px"}
             style={{ objectFit: "contain", objectPosition: "center" }}
             priority

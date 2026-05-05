@@ -50,11 +50,11 @@ export default function RunPage({ params }: { params: { slug: string } }) {
       >
         <div className="run-page-cover" aria-hidden="true">
           <Image
-            src={`/projects/${run.slug}-cs.png`}
+            src={`/projects/${run.slug}${run.wideModal ? "" : "-cs"}.png`}
             alt=""
             fill
             sizes={run.wideModal
-              ? "(max-width: 720px) 100vw, 520px"
+              ? "(max-width: 720px) 100vw, 640px"
               : "(max-width: 720px) 100vw, 420px"}
             style={{ objectFit: "contain", objectPosition: "center" }}
             priority
