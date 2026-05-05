@@ -6,11 +6,12 @@ import { RUNS, type Run } from "@/content/runs";
 
 const HERO_SLUG = "gameengine";
 
-const COVERS: Record<string, string> = {
-  gameengine: "/projects/gameengine.png",
-  matchsticked: "/projects/matchsticked.png",
-  tetris: "/projects/tetris.png",
-  calculator: "/projects/calculator.png",
+type Cover = { src: string; fit?: "cover" | "contain"; pos?: string };
+const COVERS: Record<string, Cover> = {
+  gameengine: { src: "/projects/gameengine.png", fit: "contain" },
+  matchsticked: { src: "/projects/matchsticked.png", fit: "contain" },
+  tetris: { src: "/projects/tetris.png", fit: "contain" },
+  calculator: { src: "/projects/calculator.png", fit: "contain" },
 };
 
 export function Runs() {
@@ -81,10 +82,11 @@ function HeroRun({ r }: { r: Run }) {
       <div className="hero-run-media" style={accentStyle} aria-hidden="true">
         {cover ? (
           <Image
-            src={cover}
+            src={cover.src}
             alt=""
             fill
             className="cover-img"
+            style={{ objectFit: cover.fit ?? "cover", objectPosition: cover.pos ?? "center" }}
             sizes="(max-width: 820px) 100vw, 60vw"
             priority
           />
@@ -136,10 +138,11 @@ function RunRow({ r }: { r: Run }) {
       <div className="run-row-img" style={accentStyle} aria-hidden="true">
         {cover ? (
           <Image
-            src={cover}
+            src={cover.src}
             alt=""
             fill
             className="cover-img"
+            style={{ objectFit: cover.fit ?? "cover", objectPosition: cover.pos ?? "center" }}
             sizes="(max-width: 720px) 100vw, 280px"
           />
         ) : (
