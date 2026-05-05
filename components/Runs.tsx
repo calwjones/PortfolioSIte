@@ -1,9 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { RUNS, type Run } from "@/content/runs";
 
 const HERO_SLUG = "gameengine";
+
+const COVERS: Record<string, string> = {
+  gameengine: "/projects/gameengine.png",
+  matchsticked: "/projects/matchsticked.png",
+  tetris: "/projects/tetris.png",
+  calculator: "/projects/calculator.png",
+};
 
 export function Runs() {
   const hero = RUNS.find((r) => r.slug === HERO_SLUG);
@@ -58,6 +66,7 @@ function HeroRun({ r }: { r: Run }) {
   const accentStyle = {
     ["--card-accent" as string]: `var(${r.accentVar})`,
   } as React.CSSProperties;
+  const cover = COVERS[r.slug];
   return (
     <article
       ref={ref}
@@ -70,8 +79,21 @@ function HeroRun({ r }: { r: Run }) {
       data-cursor="inspect"
     >
       <div className="hero-run-media" style={accentStyle} aria-hidden="true">
-        <span className="cover-name">{r.name}</span>
-        <span className="cover-tag">{r.tag}</span>
+        {cover ? (
+          <Image
+            src={cover}
+            alt=""
+            fill
+            className="cover-img"
+            sizes="(max-width: 820px) 100vw, 60vw"
+            priority
+          />
+        ) : (
+          <>
+            <span className="cover-name">{r.name}</span>
+            <span className="cover-tag">{r.tag}</span>
+          </>
+        )}
       </div>
       <div className="hero-run-meta">
         <div className="hero-run-top">
@@ -99,6 +121,7 @@ function RunRow({ r }: { r: Run }) {
   const accentStyle = {
     ["--card-accent" as string]: `var(${r.accentVar})`,
   } as React.CSSProperties;
+  const cover = COVERS[r.slug];
   return (
     <article
       ref={ref}
@@ -111,7 +134,17 @@ function RunRow({ r }: { r: Run }) {
       data-cursor="inspect"
     >
       <div className="run-row-img" style={accentStyle} aria-hidden="true">
-        <span className="cover-name small">{r.name}</span>
+        {cover ? (
+          <Image
+            src={cover}
+            alt=""
+            fill
+            className="cover-img"
+            sizes="(max-width: 720px) 100vw, 280px"
+          />
+        ) : (
+          <span className="cover-name small">{r.name}</span>
+        )}
       </div>
       <div className="run-row-meta">
         <div className="run-row-top">

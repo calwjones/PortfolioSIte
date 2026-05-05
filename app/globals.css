@@ -152,6 +152,15 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
   background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px);
   pointer-events: none;
 }
+.cover-img {
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+}
+.run-row-img .cover-img {
+  object-position: center;
+}
+
 .cover-name {
   font-family: var(--f-px);
   font-size: clamp(56px, 8vw, 104px);
