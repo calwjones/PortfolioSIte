@@ -43,8 +43,8 @@ export default function Page() {
         <SectionHead title="CONTACT" right="Email · LinkedIn · GitHub · CV" />
         <WorldMap />
         <footer className="savefooter">
-          <span>© 2026 Callum Jones</span>
-          <span>Built with Next.js · WebGL shaders · sand physics from my Tetris repo</span>
+          <span>© 2026 Callum Jones · Bristol, UK</span>
+          <span>Built with Next.js, TypeScript and WebGL</span>
         </footer>
       </div>
       <Toast />
