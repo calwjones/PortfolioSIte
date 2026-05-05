@@ -83,12 +83,7 @@ export function RunModal() {
 
         <header className="run-modal-head">
           <div className="meta-row">
-            <span className="rank">
-              <span className={`medal${run.medalClass ? " " + run.medalClass : ""}`}>
-                {run.medal}
-              </span>
-              {run.rankLabel}
-            </span>
+            <span className="rank">{run.rankLabel}</span>
             <span className="meta">{run.meta}</span>
           </div>
           <h2 id="run-modal-title">{run.name}</h2>
