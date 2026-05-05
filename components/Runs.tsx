@@ -55,6 +55,9 @@ function HeroRun({ r }: { r: Run }) {
     r.primary?.scroll || r.primary?.label?.toLowerCase().includes("play")
       ? "Play demo"
       : "Read case study";
+  const accentStyle = {
+    ["--card-accent" as string]: `var(${r.accentVar})`,
+  } as React.CSSProperties;
   return (
     <article
       ref={ref}
@@ -63,11 +66,12 @@ function HeroRun({ r }: { r: Run }) {
       onKeyDown={(e) => onCardKey(e, r.slug)}
       role="button"
       tabIndex={0}
-      aria-label={`Open log entry for ${r.name}`}
+      aria-label={`Open case study for ${r.name}`}
       data-cursor="inspect"
     >
-      <div className="hero-run-media" aria-label={`${r.name} screenshot placeholder`}>
-        <span className="ph-label">[ {r.name.toUpperCase()} — SCREENSHOT PLACEHOLDER ]</span>
+      <div className="hero-run-media" style={accentStyle} aria-hidden="true">
+        <span className="cover-name">{r.name}</span>
+        <span className="cover-tag">{r.tag}</span>
       </div>
       <div className="hero-run-meta">
         <div className="hero-run-top">
@@ -97,6 +101,9 @@ function HeroRun({ r }: { r: Run }) {
 function RunRow({ r }: { r: Run }) {
   const ref = useGlow<HTMLElement>(r.dataGlow);
   const isPlay = !!r.primary?.scroll;
+  const accentStyle = {
+    ["--card-accent" as string]: `var(${r.accentVar})`,
+  } as React.CSSProperties;
   return (
     <article
       ref={ref}
@@ -105,11 +112,11 @@ function RunRow({ r }: { r: Run }) {
       onKeyDown={(e) => onCardKey(e, r.slug)}
       role="button"
       tabIndex={0}
-      aria-label={`Open log entry for ${r.name}`}
+      aria-label={`Open case study for ${r.name}`}
       data-cursor="inspect"
     >
-      <div className="run-row-img" aria-label={`${r.name} screenshot placeholder`}>
-        <span className="ph-label">[ {r.name.toUpperCase()} — SCREENSHOT ]</span>
+      <div className="run-row-img" style={accentStyle} aria-hidden="true">
+        <span className="cover-name small">{r.name}</span>
       </div>
       <div className="run-row-meta">
         <div className="run-row-top">

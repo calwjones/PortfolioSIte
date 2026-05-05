@@ -128,27 +128,45 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
 .hero-run-media {
   min-height: 480px;
   background:
-    repeating-linear-gradient(45deg, rgba(255,91,31,0.04) 0 12px, transparent 12px 24px),
+    radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--card-accent, var(--accent)) 18%, transparent), transparent 65%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0 12px, transparent 12px 24px),
     linear-gradient(135deg, #1a2238, #0e1423);
   border-right: 1px solid var(--line);
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
   position: relative;
   overflow: hidden;
-  padding: 24px;
+  padding: 32px;
 }
 .hero-run-media::before {
   content: ""; position: absolute; inset: 0;
   background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px);
   pointer-events: none;
 }
-.ph-label {
-  font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.24em;
-  color: var(--fg-mute); padding: 8px 14px;
-  border: 1px dashed var(--line); border-radius: 4px;
-  background: rgba(10,13,20,0.5);
+.cover-name {
+  font-family: var(--f-px);
+  font-size: clamp(56px, 8vw, 104px);
+  letter-spacing: 0.02em;
   text-align: center;
-  max-width: 80%;
+  line-height: 1;
+  color: var(--fg);
+  text-shadow:
+    0 0 40px color-mix(in srgb, var(--card-accent, var(--accent)) 70%, transparent),
+    0 2px 24px rgba(0,0,0,0.5);
   position: relative; z-index: 1;
+  padding: 0 8px;
+}
+.cover-name.small {
+  font-size: clamp(28px, 4vw, 40px);
+}
+.cover-tag {
+  font-family: var(--f-mono);
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.28em;
+  color: var(--card-accent, var(--accent));
+  position: relative; z-index: 1;
+  padding: 5px 12px;
+  border: 1px solid color-mix(in srgb, var(--card-accent, var(--accent)) 50%, transparent);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--card-accent, var(--accent)) 8%, transparent);
 }
 .hero-run-meta {
   padding: 36px 40px;
@@ -251,7 +269,8 @@ button { font: inherit; cursor: pointer; background: transparent; border: none; 
 .run-row:hover::before { opacity: 1; }
 .run-row-img {
   background:
-    repeating-linear-gradient(45deg, rgba(107,91,255,0.04) 0 8px, transparent 8px 16px),
+    radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--card-accent, var(--accent)) 14%, transparent), transparent 65%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0 8px, transparent 8px 16px),
     linear-gradient(135deg, #161e30, #0c111d);
   display: flex; align-items: center; justify-content: center;
   border-right: 1px solid var(--line);
