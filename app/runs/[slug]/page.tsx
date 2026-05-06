@@ -40,7 +40,7 @@ export default function RunPage({ params }: { params: { slug: string } }) {
   return (
     <div className="wrap">
       <Link href="/" className="run-page-back" data-cursor="external">
-        ‹ RETURN TO SAVE FILE
+        ‹ BACK TO PORTFOLIO
       </Link>
 
       <article
@@ -49,12 +49,7 @@ export default function RunPage({ params }: { params: { slug: string } }) {
       >
         <header className="run-page-head">
           <div className="meta-row">
-            <span className="rank">
-              <span className={`medal${run.medalClass ? " " + run.medalClass : ""}`}>
-                {run.medal}
-              </span>
-              {run.rankLabel}
-            </span>
+            <span className="rank">{run.rankLabel}</span>
             <span className="meta">{run.meta}</span>
           </div>
           <h1>{run.name}</h1>
@@ -107,7 +102,7 @@ export default function RunPage({ params }: { params: { slug: string } }) {
             </a>
           )}
           <Link href="/" className="cta close-inline">
-            ‹ RETURN TO SAVE FILE
+            ‹ BACK TO PORTFOLIO
           </Link>
         </footer>
       </article>

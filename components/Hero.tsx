@@ -279,7 +279,7 @@ export function Hero() {
         <div className="top">
           <div className="brand">
             <span className="dot" />
-            CALLUM.SAV
+            CALLUM JONES — PORTFOLIO
           </div>
           <div className="sys">
             SIGNAL PAL · 50HZ<br />
@@ -294,7 +294,7 @@ export function Hero() {
             JONES<span className="u">_</span>
           </h1>
           <p className="sub">
-            Final-year CS student · UWE Bristol · graduating July 2026 · open to CS roles
+            Final-year Computer Science · UWE Bristol · graduating July 2026 · open to graduate roles
           </p>
           <div className="hero-actions">
             <a

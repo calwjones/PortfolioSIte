@@ -23,7 +23,7 @@ const COMMANDS: { usage: string; desc: string }[] = [
 ];
 
 const WELCOME: Line[] = [
-  { kind: "out", text: "CALLUM.SAV · COMMAND LINE v1.0" },
+  { kind: "out", text: "CALLUM JONES — COMMAND LINE v1.0" },
   { kind: "out", text: "type 'help' for commands, or use the legend on the right." },
   { kind: "out", text: "" },
 ];
@@ -201,7 +201,7 @@ export function Terminal() {
   return (
     <div className="terminal" role="dialog" aria-label="Command line">
       <div className="terminal-head">
-        <span className="title">▸ CALLUM.SAV / CMD</span>
+        <span className="title">▸ CALLUM JONES / CMD</span>
         <span className="hint">press / to toggle · Esc to close</span>
         <button
           className="terminal-close"

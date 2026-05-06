@@ -446,12 +446,12 @@ export function SandTetris() {
         </div>
       </div>
       <div className="info">
-        <div className="kicker">Sand Tetris · from my repo</div>
+        <div className="kicker">Sand Tetris · embedded build</div>
         <h3>SAND.TETRIS</h3>
         <p>
           Pieces crumble into coloured sand on lock. Momentum-based grain spread,
-          8-connected BFS clears when a colour bridges left-to-right. Same mechanics
-          as the real game — ported from my vanilla-JS build.
+          8-connected flood-fill clears when a colour bridges the canvas left to
+          right. Same code as the standalone build, running inline.
         </p>
         <div className="controls-row">
           <span className="k">

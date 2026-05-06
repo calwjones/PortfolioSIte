@@ -7,11 +7,6 @@ export type Achievement = {
 };
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: "first-visit",    name: "First Visit",       hint: "boot the save file" },
-  { id: "scroll-further", name: "Scroll Further",    hint: "reach the footer" },
-  { id: "quest-giver",    name: "Quest Giver",       hint: "find the contact zone" },
-  { id: "log-opened",     name: "Log Entry Opened",  hint: "open any run" },
-  { id: "completionist",  name: "Completionist",     hint: "open every run log" },
   { id: "sand-artist",    name: "Sand Artist",       hint: "20+ in Sand Tetris" },
   { id: "snake-charmer",  name: "Snake Charmer",     hint: "100+ in Snake" },
   { id: "cli-wizard",     name: "CLI Wizard",        hint: "type a command" },
