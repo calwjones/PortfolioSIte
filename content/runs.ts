@@ -33,6 +33,8 @@ export type Run = {
   source: RunAction;
   caseStudy?: CaseStudy;
   mapPin?: { x: number; y: number; label?: string; anchor?: "start" | "end" };
+  /** Use a wider modal/page with the screenshot at the top (for projects with landscape UIs that don't fit a side column). */
+  wideModal?: boolean;
 };
 
 const MATCHSTICKED_CASE_STUDY: CaseStudy = {
@@ -57,30 +59,30 @@ const MATCHSTICKED_CASE_STUDY: CaseStudy = {
     {
       heading: "PROBLEM",
       body: [
-        "The problem isn't film recommendations. Those exist already. It's that two people deciding together don't have a shared interface for it, so they take turns scrolling the same Netflix page they'd both already rejected.",
-        "The interesting design constraint was building something where the interaction itself does the converging work, rather than asking either person to argue for a film. If both phones are swiping at once and the only thing they see is a match modal, neither person has to advocate. The system surfaces consensus instead of asking for it. That framing then dictates the technical shape: a real-time session that tracks what both clients have voted on, a queue that stays in sync across both, and a way to seed that queue from each person's actual taste so you're not starting from popular-on-Netflix again.",
+        "Recommendations weren't the problem. Those exist already. The gap was that two people deciding together don't have a shared interface for it, so they take turns scrolling the same Netflix page they've both already rejected.",
+        "What I wanted was an interaction that does the picking work itself, instead of one person advocating for a film. If both phones are swiping at once and the only thing either person sees is a match modal, neither has to argue their case. That dictates the shape of the system: a real-time session tracking what both clients have voted on, a queue kept in sync across both, and a way to seed that queue from each person's actual taste so you're not picking from popular-on-Netflix again.",
       ],
     },
     {
       heading: "APPROACH",
       body: [
-        "The first prototype was a Python script. Two terminals, TMDb pulls, swipe input from both, intersection at the end. It validated the matching logic but the UX didn't survive contact with the situation the project was meant to fix.",
+        "The first prototype was a Python script. Two terminals, TMDb pulls, swipe input from both, intersection at the end. It validated the matching logic, but a terminal UX didn't actually fit the situation the project was for: two people in a room, each on their phone.",
         "The version I shipped is a Next.js client with an Express + Socket.IO server, Prisma over Postgres for persistence. Each session is a server-side room that holds canonical state. Clients emit swipes, the server resolves matches and emits the match notification back. Letterboxd CSV import seeds the queue from films you've already logged, which mattered more than I expected: recommendations get uninteresting fast if they keep surfacing things you've already had an opinion on. Solo roulette mode covers the single-user case, discover mode covers the case where you've exhausted both watchlists. The whole stack is containerised with separate dev and prod compose files. The prod one runs at matchsticked.com.",
       ],
     },
     {
       heading: "WHAT BROKE",
       body: [
-        "The first session-sync implementation broadcast every swipe to every client in the room. It worked locally and fell apart the moment the clients were on different networks with different latencies. Reconnects dropped events. Room state could disagree across clients, with one phone registering a match before the other had even seen the relevant film. I rewrote the protocol twice before the third design felt right.",
-        "The version that won is server-authoritative. The server holds the canonical session state. Clients send swipes, but they don't trust their own state. On reconnect they re-sync from the server rather than replaying anything they had queued locally. It's more upfront design than the broadcast version, but the failure modes that were impossible to debug in broadcast disappear, because there's only one source of truth and both clients can ask it the same question.",
-        "The Letterboxd import was the other long tail. The CSV is human-readable, which means it isn't machine-clean. Year suffixes are sometimes there and sometimes aren't. Special characters appear inconsistently. The same film can show up under two different titles depending on which release you logged. The import pipeline ended up being a fuzzy match against TMDb with a confidence threshold, and anything below the threshold gets routed to a manual review step before it's persisted.",
+        "The first session-sync implementation broadcast every swipe to every client in the room. It worked locally, but broke as soon as clients were on different networks with different latencies. Reconnects dropped events. Room state could disagree across clients, with one phone registering a match before the other had even seen the film. I rewrote the protocol twice before the third design felt right.",
+        "The third design was server-authoritative. The server holds the canonical session state. Clients send swipes but don't trust their own state. On reconnect they re-sync from the server rather than replaying anything queued locally. It needed more upfront design than broadcast, but the failure modes that were impossible to debug in broadcast disappeared, because there's only one source of truth and both clients can ask it the same question.",
+        "The Letterboxd import was the other long tail. The CSV is human-readable, so it isn't machine-clean. Year suffixes are sometimes there and sometimes aren't. Special characters appear inconsistently. The same film can show up under two different titles depending on which release you logged. The import pipeline ended up being a fuzzy match against TMDb with a confidence threshold, and anything below the threshold gets routed to a manual review step before it's persisted.",
       ],
     },
     {
       heading: "WHAT I LEARNED",
       body: [
-        "Multi-user systems aren't harder per-feature than single-user ones. Their bug surface just lives somewhere different. Most of the bugs I fixed in production weren't in the matching logic. That worked from the prototype onwards. They were in reconnections, in event ordering between clients on different networks, and in partial-connectivity edge cases. If you design the protocol assuming the network is reliable, you spend the next month fixing the consequences. Server-authoritative state is more work to set up but considerably easier to reason about once it's running, and I'd reach for that pattern again before defaulting to broadcast.",
-        "Designing for two real users, rather than for myself and then shipping, surfaced a different set of problems. Bug reports from someone who'll text you when something breaks raise the bar for what 'working' means in a way I couldn't have produced on my own.",
+        "Most of the bugs I fixed in production weren't in the matching logic. That worked from the prototype onwards. They were in reconnections, in event ordering between clients on different networks, and in partial-connectivity edge cases. Designing the protocol assuming the network was reliable cost me a month of fixing the consequences. Server-authoritative state took more upfront design but was easier to reason about once running, and I'd reach for it again before defaulting to broadcast.",
+        "Designing for two real users instead of testing alone surfaced a different set of problems. Someone else using the project and texting you when it breaks holds you to a higher 'working' standard than testing it yourself ever does.",
       ],
     },
   ],
@@ -100,23 +102,23 @@ const TETRIS_CASE_STUDY: CaseStudy = {
     {
       heading: "PROBLEM",
       body: [
-        "Sand-physics Tetris exists in a few places. The interesting part isn't the concept itself, it's the simulation. Making the per-grain physics feel right and finding a clear mechanic that's satisfying once row clears stop being available are both genuinely non-trivial problems.",
-        "I wanted to build my own version partly because it's a project that's visually obvious when it's working, and partly because the rendering and physics work was unfamiliar territory. Most of my projects up to that point had been more on the application side.",
+        "Sand-physics Tetris exists in a few places already. The hard parts are the simulation itself: making the per-grain physics feel right, and finding a clear mechanic that's satisfying once row clears stop being available.",
+        "I wanted to build my own version partly because it's visually obvious when it's working, and partly because the rendering and physics work was unfamiliar territory. Most of my projects up to that point had been more on the application side.",
       ],
     },
     {
       heading: "APPROACH",
       body: [
         "HTML5 Canvas, vanilla JavaScript, no framework. A piece spawns as a normal tetromino on a coarse grid. The moment it locks, each filled cell of that piece becomes roughly 64 grains on a finer grid at 4× the spawn resolution. From there the simulation is per-grain: each tick, every grain tries to fall straight down, and if the cell below is occupied it tries diagonally. Settled grains stay put.",
-        "Clears were the part that needed thinking through. Row clears don't apply because the board doesn't really have rows in any structured sense. The version that shipped runs an 8-connected flood fill from the left wall: if a connected region of same-coloured grains reaches both walls, that whole region clears. So the player isn't building lines, they're building colour bridges. That changes the game in two ways. Setups can fail at the last moment when a single misplaced grain breaks the chain, and unintended clears happen when a piece you placed for one reason completes a region three rows below where you put it. The second one is more fun than I expected.",
-        "The Express + SQLite leaderboard backend is small but it makes the game feel finished. Per-mode scoring with submission validation and basic rate-limiting on the public endpoint.",
+        "Clears needed thinking through. Row clears don't apply because the board doesn't really have rows in any structured sense. The shipped mechanic runs an 8-connected flood fill from the left wall: if a connected region of same-coloured grains reaches both walls, the whole region clears. The player is building colour bridges instead of lines. That changes the game in two ways. Setups can fail at the last moment when one misplaced grain breaks the chain, and unintended clears happen when a piece you placed for one reason completes a region three rows below where you put it. The second one is more fun than I expected.",
+        "The Express + SQLite leaderboard backend is small. Per-mode scoring with submission validation and basic rate-limiting on the public endpoint.",
       ],
     },
     {
       heading: "WHAT BROKE",
       body: [
-        "Performance was the dominant issue throughout. The first version stored each grain as a JavaScript object with x, y, vx, vy, and colour fields, and ran a per-grain update over the whole array each frame. At around 3,000 grains it sat at 25fps and got worse from there as more pieces locked.",
-        "The fix was three things, none of them clever in isolation but each one significant.",
+        "Performance was the main issue. The first version stored each grain as a JavaScript object with x, y, vx, vy, and colour fields, and ran a per-grain update over the whole array each frame. At around 3,000 grains it sat at 25fps and got worse as more pieces locked.",
+        "The fix was three things, each one significant.",
         "The grain data moved to typed arrays: parallel arrays of primitives instead of an array of objects. That removed the cost of scattered heap allocations and made the simulation pass cache-friendly.",
         "The spread-direction calculation moved to a precomputed lookup table. Spread angles are quantised to a small set of values rather than continuous, so there's no reason to compute them at runtime.",
         "The biggest single fix was a Date.now() call I'd put inside the per-grain inner loop without thinking about it. At 3,200 grains × 60fps that's almost 200,000 calls per second to a function that isn't free. Hoisting it to one call per frame removed it from the hot path entirely. After those three changes the game holds 60fps comfortably with the sand pile fully built up.",
@@ -125,8 +127,8 @@ const TETRIS_CASE_STUDY: CaseStudy = {
     {
       heading: "WHAT I LEARNED",
       body: [
-        "Profiling tells you things intuition won't. I'd spent half a day looking for a smarter spread algorithm and the actual problem was a function call I'd added without measurement. Chrome DevTools' performance panel found it in seconds. That gap between where I thought the cost was and where it actually was is the thing I came back to in subsequent projects: assume nothing about the hot path, measure it.",
-        "The other lesson is more general. Memory layout matters more than algorithmic cleverness for hot-loop simulation work at this scale. Switching from array-of-objects to parallel arrays of primitives was the largest single performance gain I made on this project, and the actual algorithm didn't change at all.",
+        "I spent half a day looking for a smarter spread algorithm before opening DevTools. The actual problem was a function call I'd added without measuring it. Chrome's performance panel found it in seconds. I keep coming back to that on later projects: assume nothing about the hot path, measure it.",
+        "Memory layout also mattered more than algorithmic cleverness here. Switching from array-of-objects to parallel arrays of primitives was the largest single performance gain on the project, and the algorithm didn't change at all.",
       ],
     },
   ],
@@ -146,7 +148,7 @@ const CALCULATOR_CASE_STUDY: CaseStudy = {
     {
       heading: "PROBLEM",
       body: [
-        "On the surface a calculator is a small UI project. Underneath, the interesting question is how you evaluate an arithmetic expression correctly under operator precedence and parenthesisation rules. The path of least resistance is to call the language's interpreter on the input string, but doing that on user input is unsafe in any real context, and it bypasses the part of the project that's worth doing. So: build the parser by hand.",
+        "On the surface a calculator is a small UI project. The actual work is in evaluating an arithmetic expression correctly under operator precedence and parenthesisation rules. The path of least resistance is to call the language's interpreter on the input string, but that's unsafe on user input in any real context, and it skips the part of the project worth doing. So: build the parser by hand.",
       ],
     },
     {
@@ -167,8 +169,8 @@ const CALCULATOR_CASE_STUDY: CaseStudy = {
     {
       heading: "WHAT I LEARNED",
       body: [
-        "Building an expression parser by hand was the most useful component of the project, beyond the calculator itself. The technique generalises to any context that requires parsing a structured input grammar: operator precedence, recursive descent, the distinction between syntax and semantics. None of that was strictly required for what I was building, but the techniques carried over to the projects I built afterwards in a way the calculator itself didn't.",
-        "The other takeaway is the one I keep coming back to: there's no scenario in which executing arbitrary user-supplied input against a language interpreter is the correct choice for a real application. The convenience of running input directly is real, and the risk it introduces is asymmetric and severe. Once you've written a parser by hand, the trade-off becomes obvious.",
+        "Writing the expression parser by hand was the most useful part of the project for me. Operator precedence, recursive descent, the line between syntax and semantics: none of that was strictly required for a calculator, but those techniques carried over to later projects more than the calculator itself did.",
+        "The other takeaway: running arbitrary user input through a language interpreter isn't a workable approach for a real application. Running input directly is convenient. The risk is bigger than the convenience. Writing one parser by hand changed how I think about that trade.",
       ],
     },
   ],
@@ -212,7 +214,7 @@ export const RUNS: Run[] = [
     meta: "2026 · C++ · CMAKE",
     name: "GameEngine",
     tag: "FINAL-YEAR DISSERTATION",
-    desc: "Final-year dissertation. A 2D platformer engine and visual editor in C++17, three-layer architecture, fixed-timestep physics, spatial-grid collision, ImGui editor with undo/redo and JSON saves. My deepest dive into systems code so far.",
+    desc: "Final-year dissertation. A 2D platformer engine and visual editor in C++17. Three-layer architecture, fixed-timestep physics, spatial-grid collision, ImGui editor with undo/redo and JSON level files.",
     diffClass: "diff-hard",
     diffStars: "★★★★★",
     hours: "200+",
@@ -228,6 +230,7 @@ export const RUNS: Run[] = [
     primary: { label: "⤓ DISSERTATION", href: "/GameEngine_Dissertation.pdf" },
     source: { label: "⤓ SOURCE", href: "https://github.com/calwjones/GameEngine" },
     mapPin: { x: 340, y: 170, anchor: "end" },
+    wideModal: true,
     caseStudy: {
       pitch:
         "Final-year dissertation. A 2D platformer engine and visual level editor in C++17. Three layers (Game, Engine, Editor) with strictly downward dependencies, so the engine has no idea the editor exists. SFML for windowing, Dear ImGui for the editor, RapidJSON for level files. Cross-platform CMake build for macOS and Windows.",
@@ -242,8 +245,8 @@ export const RUNS: Run[] = [
         {
           heading: "PROBLEM",
           body: [
-            "My degree had leaned heavily on higher-level languages. I wanted the dissertation to push me into systems work that the taught modules hadn't covered: manual memory management, fixed-timestep simulation, immediate-mode GUI architecture, the parts of an engine that any tutorial usually abstracts away.",
-            "The deeper motivation was that I wanted to be able to point at any line in the engine and explain what it does. Engine tutorials I'd worked through before always hid the bits I cared about: input handling beneath an event abstraction, physics inside a black-box library call, level loading as a function that just returns a Scene. Those abstractions are reasonable for the projects they're in, but they're also exactly the layers I wanted the dissertation to force me to confront.",
+            "My degree had leaned heavily on higher-level languages. I wanted the dissertation to push me into systems work the taught modules hadn't covered: manual memory management, fixed-timestep simulation, immediate-mode GUI architecture, the parts of an engine any tutorial usually abstracts away.",
+            "More specifically: I wanted to be able to point at any line in the engine and explain what it does. Engine tutorials I'd worked through always hid the bits I cared about. Input handling buried in an event abstraction. Physics inside a library call. Level loading as a function that just returns a Scene. Those abstractions are fine for the projects they're in. They were exactly the layers I wanted to write myself.",
           ],
         },
         {
@@ -261,16 +264,16 @@ export const RUNS: Run[] = [
           body: [
             "Undo/redo was the system that taught me the most about C++ memory lifetimes. Commands hold pointers to entities. That's fine while everything is alive. But if a separate code path frees those entities (loading a new level, for example) the command history becomes a list of dangling pointers and the next undo crashes the editor.",
             "The fix was twofold. Clear command history before clearing entities, so there's never a window where the history references freed memory. And give the entity manager a detachEntity() method that hands ownership to the command rather than deleting, so undoing an entity deletion can restore the original object rather than reconstructing one. That meant auditing every code path that touches entity lifetime: opening a level, closing a level, clearing the scene, deleting from the scene panel, the play/stop snapshot system. Unique IDs would have avoided the whole class of problem and that's the change I'd reach for in a future version.",
-            "The structured test plan caught five real bugs that I would not have found by playing the engine. Five flying enemies bobbed in sync because they shared a sine phase, which I fixed with per-entity 1.2 rad offsets. Multi-entity drag created individual MoveCommands instead of one CompoundCommand, so undoing a 5-entity drag took five Ctrl+Z. Terminal velocity wasn't capped, which meant falling players accelerated forever. Malformed JSON crashed the loader instead of falling back to defaults. The dirty flag wasn't set by undo/redo, so you could close the window without the unsaved-changes prompt firing. Each one was the kind of bug that hides inside a codebase you mostly use yourself.",
-            "Memory took the first month. I came from TypeScript, where the garbage collector forgives a lot. Switching to unique_ptr and RAII once I actually understood what they were enforcing dropped the bug rate faster than any single fix did.",
+            "The structured test plan caught five real bugs I would not have found by playing the engine. Five flying enemies bobbed in sync because they shared a sine phase, which I fixed with per-entity 1.2 rad offsets. Multi-entity drag created individual MoveCommands instead of one CompoundCommand, so undoing a 5-entity drag took five Ctrl+Z. Terminal velocity wasn't capped, so falling players accelerated forever. Malformed JSON crashed the loader instead of falling back to defaults. The dirty flag wasn't set by undo/redo, so you could close the window without the unsaved-changes prompt firing.",
+            "Memory took the first month. JavaScript and Python had been my main languages before this, and both let the garbage collector handle most of it for you. Once I actually understood what unique_ptr and RAII were enforcing, switching to them dropped the bug rate faster than any single fix did.",
           ],
         },
         {
           heading: "WHAT I LEARNED",
           body: [
-            "The biggest change in how I think about projects after this one is that tools are the project. Once the editor existed, I built more game in a weekend than I had in the previous month of writing levels by hand in code. The next time I build something with a similar shape I'd build the editor first and the engine around it.",
-            "The other change is more about process. Halfway through development I refactored entity creation into a centralised EntityFactory, with each subclass registering itself. Before the refactor, the editor checked type strings in a dozen places. Adding a new entity type meant editing all of them. After the refactor, new entity types didn't touch editor code at all. The factory wasn't in the original design and probably should have been. The lesson I took from it is that when you find yourself making the same change in three different files, the abstraction is sitting there waiting.",
-            "The structured test plan was also more useful than I expected, and I'd produce it earlier next time. Doing it at the end caught the bugs above, but if I'd written it before the implementation started, the tests could have driven design decisions rather than just validating them after the fact.",
+            "Once the editor existed, I built more game in a weekend than I had in the previous month writing levels by hand in code. Next time I build something with a similar shape I'd build the editor first and the engine around it.",
+            "Halfway through I refactored entity creation into a centralised EntityFactory with each subclass registering itself. Before, the editor checked type strings in a dozen places, and adding a new entity type meant editing all of them. After, new entity types didn't touch editor code. The factory wasn't in the original design and probably should have been. Now when I'm making the same change in three different files, I take that as a hint to refactor.",
+            "The structured test plan was more useful than I expected. Writing it at the end caught the bugs above, but if I'd written it before implementation started, the tests could have driven design decisions instead of just validating them afterwards.",
           ],
         },
       ],
@@ -315,7 +318,7 @@ export const RUNS: Run[] = [
     meta: "2024 · PYTHON · TKINTER",
     name: "Calculator",
     tag: "DESKTOP APP",
-    desc: "Desktop calculator with simple and scientific modes, full keyboard control, expression history. Hand-written shunting-yard parser into RPN — parses arithmetic safely instead of passing input to an interpreter.",
+    desc: "Desktop calculator with simple and scientific modes, full keyboard control, expression history. Hand-written shunting-yard parser into RPN, so user input is parsed directly rather than passed to an interpreter.",
     diffClass: "diff-easy",
     diffStars: "★★☆☆☆",
     hours: "10",

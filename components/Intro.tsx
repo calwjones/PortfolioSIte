@@ -6,7 +6,7 @@ export function Intro() {
         <em>Callum Jones.</em> Final-year Computer Science student at{" "}
         <em>UWE Bristol</em>, graduating July 2026.{" "}
         <span className="dim">
-          Looking for graduate software engineering roles across the UK — full-stack
+          Looking for graduate software engineering roles across the UK: full-stack
           web, backend, or systems. On-site or remote.
         </span>
       </p>

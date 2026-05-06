@@ -4,7 +4,7 @@ export function NowStrip() {
       <div className="kicker">CURRENTLY</div>
       <p>
         Graduating July 2026. Looking for{" "}
-        <em>graduate software engineering roles</em> starting this summer — UK,
+        <em>graduate software engineering roles</em> starting this summer. UK,
         on-site or remote.
       </p>
       <div className="now-row">
